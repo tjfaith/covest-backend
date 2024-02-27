@@ -1,17 +1,52 @@
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
+  previewFeatures = ["driverAdapters"]
 }
 
 datasource db {
-  provider = "postgres"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
 model User {
-  id      String      @id @default(cuid())
-  email   String   @unique
-  first_name    String?
-  last_name   String?
-  other_names String?
-  phone_number  String?   
+  id             String     @id @default(cuid())
+  email          String     @unique
+  password       String
+  first_name     String?
+  last_name      String?
+  phone_number   String?
+  gender         String?
+  marital_status String?
+  date_of_birth  DateTime?
+  address        String?
+  status         String?
+  referela_links Referal[]
+  properties     Property[]
+}
+
+model Referal {
+  id     String  @id @default(cuid())
+  user   User?   @relation(fields: [userId], references: [id])
+  userId String?
+}
+
+model Property {
+  property_id      String    @id @default(cuid())
+  title            String
+  description      String
+  amount           Float
+  property_type    String
+  property_details String
+  user             User?     @relation(fields: [userId], references: [id])
+  retailer         Retailer? @relation(fields: [retailerId], references: [id])
+  userId           String?
+  retailerId       String?
+}
+
+model Retailer {
+  id           String     @id @default(cuid())
+  full_name    String
+  email        String
+  phone_number String
+  properties   Property[]
 }

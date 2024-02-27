@@ -1,8 +1,12 @@
 import express from "express";
+import * as userController from "@/controllers/userController";
+import { validateCreateUserInput } from '@/validators/userValidator';
+
 const router = express.Router();
 
-const userController = require("../controllers/userController");
+router.post("/register", validateCreateUserInput,  userController.createUser);
+router.get("/all",  userController.getAllUsers);
 
-router.get("/", userController.get_all_users);
 
-module.exports = router;
+
+export default router;
