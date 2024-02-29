@@ -27,8 +27,8 @@ const createUser = async (userData: CreateUserInput) => {
 };
 
 
-const updateUser = async(userData: CreateUserInput)=>{
-
+const updateUser = async(userData: CreateUserInput, userId:string)=>{
+console.log(userId,'USER ID...')
 }
 
 const getAllUsers = async () => {

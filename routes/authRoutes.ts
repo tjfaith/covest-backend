@@ -5,8 +5,7 @@ import {
   validateGoogleLogin,
   validateInitiateForgottenPassword,
   validateResetPassword,
-} from "@/validators/userValidator";
-import { authenticateUser } from "@/middleware/authMiddleware";
+} from "@/middleware/validators/authValidator";
 
 const router = express.Router();
 

@@ -12,8 +12,9 @@ export const createUser = async (req: Request, res: Response) => {
 
 
 export const updateUser = async (req: Request, res: Response) => {
+
   try {
-    const updatedUser = await UserService.updateUser(req.body);
+    const updatedUser = await UserService.updateUser(req.body, req.auth?.userId);
     res.status(201).json(updatedUser);
   }  catch (error: unknown) { 
     res.status(400).json({ error: (error as Error).message }); 

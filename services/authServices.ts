@@ -71,8 +71,9 @@ export const login = async (userData: LoginUserInput) => {
     const token = jwt.sign({ userId: user.id }, JWT_SECRET, {
       expiresIn: "1h",
     });
+    
 
-    return { status: 200, message: "Sign in successful", data: token };
+    return { status: 200, message: "Sign in successful", data: {token} };
   } catch (error) {
     return { status: 500, message: "Internal server error" };
   }
@@ -165,9 +166,7 @@ export const initiateForgotPassword = async (
 export const resetPassword = async (userData: Record<string, string>) => {
   const { newPassword, confirmPassword, email, token } = userData;
  
-
   try {
-    console.log(token, 'TOKEN......')
     const decodedToken = jwt.verify(token, JWT_SECRET);
 
     const userId = (decodedToken as any).userId;
@@ -200,7 +199,6 @@ export const resetPassword = async (userData: Record<string, string>) => {
       data: updatedUser,
     };
   } catch (error) {
-    console.log(error, 'reset password...')
     return {
       status: 500,
       message: "An error occurred while resetting the password.",

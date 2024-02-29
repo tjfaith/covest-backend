@@ -6,7 +6,7 @@ const JWT_SECRET = process.env.JWT_SECRET as string
 declare global {
   namespace Express {
     interface Request {
-      user?: JwtPayload;
+      auth?: JwtPayload;
     }
   }
 }
@@ -23,14 +23,15 @@ export const authenticateUser = (
   }
 
   const token = authHeader.split(' ')[1];
+  // const token = authHeader;
 
   try {
     const decodedToken = jwt.verify(token, JWT_SECRET) as JwtPayload;
     // const { id } = decodedToken;
-    req.user = decodedToken;
-    console.log(decodedToken, 'decoded')
+    req.auth = decodedToken;
     next();
   } catch (error) {
+    console.log(error)
     return res.status(401).json({ message: 'Invalid or expired token' });
   }
 };
