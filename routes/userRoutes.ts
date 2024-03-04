@@ -5,9 +5,7 @@ import { authenticateUser } from "@/middleware/authMiddleware";
 
 const router = express.Router();
 
-router.post("/update-data", authenticateUser, validateUpdateUser,  userController.updateUser);
+router.patch("/update-data", authenticateUser, validateUpdateUser,  userController.updateUser);
 router.get("/all",  userController.getAllUsers);
-
-
 
 export default router;

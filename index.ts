@@ -3,6 +3,7 @@ import express from "express";
 import cors from "cors";
 import authRoutes from "@/routes/authRoutes";
 import userRoutes from "@/routes/userRoutes";
+import paymentRoutes from "@/routes/paymentRoutes";
 
 const app = express();
 app.use(cors());
@@ -21,3 +22,4 @@ app
   // routes
 app.use("/api/users", userRoutes);
 app.use("/api/auth", authRoutes)
+app.use("/api/payment", paymentRoutes)

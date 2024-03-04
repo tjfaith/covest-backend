@@ -36,20 +36,5 @@ export const validateUpdateUser = (
 };
 
 
-// VALIDATE CHANGE PASSWORD
-const changeUserSchema = Joi.object({
-    previous_password: Joi.string().required(),
-    new_password: Joi.string().pattern(new RegExp('^[a-zA-Z0-9]{3,30}$')).required(),
-});
 
-export const validateUserPassword = (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  const { error } = changeUserSchema.validate(req.body);
-  if (error) {
-    return res.status(400).json({ error: error.details[0].message });
-  }
-  next();
-};
+

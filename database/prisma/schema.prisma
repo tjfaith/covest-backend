@@ -8,39 +8,89 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User {
-  id             String     @id @default(cuid())
-  email          String     @unique
-  password       String
-  first_name     String?
-  last_name      String?
-  phone_number   String?
-  gender         String?
-  marital_status String?
-  date_of_birth  DateTime?
-  address        String?
-  status         String?
-  referela_links Referal[]
-  properties     Property[]
+enum Status {
+  active
+  pending
+  disabled
 }
 
-model Referal {
-  id     String  @id @default(cuid())
-  user   User?   @relation(fields: [userId], references: [id])
-  userId String?
+enum PaymentStatus {
+  pending
+  success
+  failed
+}
+
+model User {
+  id                  String      @id @default(cuid())
+  email               String      @unique
+  password            String
+  first_name          String?
+  last_name           String?
+  phone_number        String?
+  gender              String?
+  marital_status      String?
+  date_of_birth       DateTime?
+  address             String?
+  city                String?
+  role                String?
+  state               String?
+  country             String?
+  status              Status      @default(pending)
+  nok_full_name       String?
+  nok_email           String?
+  nok_phone_number    String?
+  nok_relationship    String?
+  nok_address         String?
+  token               String?
+  refer_link          String?
+  referrals           Referrals[] @relation("ReferringUser")
+  main_user_referrals Referrals[] @relation("MainUser")
+  payments            Payment[]
+  properties          Property[]
+  created_at          DateTime    @default(now()) @map("created_at")
+  updated_at          DateTime    @updatedAt @map("updated_at")
+}
+
+model Referrals {
+  id                String   @id @default(cuid())
+  main_user         User?    @relation("MainUser", fields: [main_user_id], references: [id])
+  referring_user    User?    @relation("ReferringUser", fields: [referring_user_id], references: [id])
+  main_user_id      String?
+  referring_user_id String?
+  created_at        DateTime @default(now()) @map("created_at")
+  updated_at        DateTime @updatedAt @map("updated_at")
+}
+
+model Payment {
+  id                   String        @id @default(cuid())
+  authorization_url    String
+  access_code          String
+  amount               Float
+  reference            String        @unique
+  status               PaymentStatus @default(pending)
+  user                 User?         @relation(fields: [user_id], references: [id])
+  property             Property?     @relation(fields: [property_id], references: [id])
+  property_id          String?
+  user_id              String?
+  created_at           DateTime      @default(now()) @map("created_at")
+  updated_at           DateTime      @updatedAt @map("updated_at")
+  payment_full_details String?
 }
 
 model Property {
-  property_id      String    @id @default(cuid())
+  id               String    @id @default(cuid())
   title            String
   description      String
   amount           Float
   property_type    String
   property_details String
-  user             User?     @relation(fields: [userId], references: [id])
-  retailer         Retailer? @relation(fields: [retailerId], references: [id])
-  userId           String?
-  retailerId       String?
+  user             User?     @relation(fields: [user_id], references: [id])
+  retailer         Retailer? @relation(fields: [retailer_id], references: [id])
+  payments         Payment[]
+  user_id          String?
+  retailer_id      String?
+  created_at       DateTime  @default(now()) @map("created_at")
+  updated_at       DateTime  @updatedAt @map("updated_at")
 }
 
 model Retailer {
@@ -49,4 +99,6 @@ model Retailer {
   email        String
   phone_number String
   properties   Property[]
+  created_at   DateTime   @default(now()) @map("created_at")
+  updated_at   DateTime   @updatedAt @map("updated_at")
 }

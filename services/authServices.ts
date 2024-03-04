@@ -2,21 +2,22 @@ import { Prisma, prismaClient } from "@/database";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { OAuth2Client } from "google-auth-library";
-
 import { CreateUserInput, EmailRequirement } from "@/interfaces";
+import { Status } from "@prisma/client";
+
+const JWT_SECRET = process.env.JWT_SECRET as string;
+
 import {
-  generateUniqueId,
+  generateJwtToken,
   sendMail,
   verifyEmail,
   confirmForgotPasswordEmail,
 } from "@/services";
 import {
   GoogleLoginDetails,
+  GoogleSignupInstance,
   LoginUserInput,
-  UserInstance,
 } from "@/interfaces/userInterface";
-
-const JWT_SECRET = process.env.JWT_SECRET as string;
 
 export const signUp = async (userData: CreateUserInput) => {
   try {
@@ -26,18 +27,29 @@ export const signUp = async (userData: CreateUserInput) => {
       data: {
         email: email,
         password: hashedPassword,
+        status: "pending",
       },
     });
+    const token = generateJwtToken({ userId: newUser.id, email })
 
+   await prismaClient.user.update({
+      where: { id: newUser.id },
+      data: { token },
+    });
     const message_payload: EmailRequirement = {
       to: [email],
       subject: "Verify Email",
       text: "You are welcome",
-      template: verifyEmail({ token: generateUniqueId() }),
+      template: verifyEmail({token}),
     };
     sendMail(message_payload);
 
-    return { status: 201, message: "User created successfully", data: newUser };
+    return {
+      status: 201,
+      message:
+        "User created successfully, check your email to verify your account",
+      data: newUser,
+    };
   } catch (error) {
     if (
       error instanceof Prisma.PrismaClientKnownRequestError &&
@@ -68,12 +80,18 @@ export const login = async (userData: LoginUserInput) => {
       return { status: 401, message: "Invalid credentials" };
     }
 
-    const token = jwt.sign({ userId: user.id }, JWT_SECRET, {
-      expiresIn: "1h",
-    });
-    
+    if (user.status === "pending") {
+      return { status: 403, message: "Account is pending approval." };
+    }
 
-    return { status: 200, message: "Sign in successful", data: {token} };
+    const token = generateJwtToken({ userId: user.id });
+
+    await prismaClient.user.update({
+      where: { id: user.id },
+      data: { token },
+    });
+
+    return { status: 200, message: "Sign in successful", data: { token } };
   } catch (error) {
     return { status: 500, message: "Internal server error" };
   }
@@ -98,19 +116,23 @@ export const googleLogin = async (googleAuthDetails: GoogleLoginDetails) => {
     });
 
     if (!user) {
-      const user_payload = {
+      const user_payload:GoogleSignupInstance = {
         email: payload?.email?.toLowerCase() as string,
         first_name: payload?.given_name,
         last_name: payload?.family_name,
         avatar: payload?.picture,
-        status: payload?.email_verified ? "active" : "pending",
-        password: "SOCIAL_LOGIN",
+        status: payload?.email_verified ? Status.active : Status.pending,
+        password:await bcrypt.hash("SOCIAL_LOGIN", 10),
       };
+
 
       const newUser = await prismaClient.user.create({
         data: user_payload,
       });
 
+      if(user_payload.status==='active'){
+        await login({email:user_payload.email, password:user_payload.password})
+      }
       return {
         status: 201,
         message: "User created successfully",
@@ -122,10 +144,11 @@ export const googleLogin = async (googleAuthDetails: GoogleLoginDetails) => {
       return { status: 401, message: "Please verify your email" };
     }
 
-    const token = jwt.sign({ userId: user.id }, JWT_SECRET, {
-      expiresIn: "1h",
+    const token = generateJwtToken({userId:user.id, email:user.email})
+    await prismaClient.user.update({
+      where: { id: user.id },
+      data: { token },
     });
-
     return { status: 200, message: "Sign in successful", data: token };
   } catch (error) {
     return { status: 500, error: "Failed to authenticate with Google" };
@@ -148,7 +171,7 @@ export const initiateForgotPassword = async (
     return { status: 403, message: "Account is pending approval." };
   }
 
-  const token = jwt.sign({ userId: user.id, email }, JWT_SECRET, { expiresIn: '1h' });
+  const token = generateJwtToken({ userId: user.id, email });
 
   const message_payload: EmailRequirement = {
     to: [email],
@@ -157,6 +180,12 @@ export const initiateForgotPassword = async (
     template: confirmForgotPasswordEmail({ token }),
   };
   sendMail(message_payload);
+
+  await prismaClient.user.update({
+    where: { id: user.id },
+    data: { token },
+  });
+
   return {
     status: 200,
     message: "Check your email for link to reset your password",
@@ -165,38 +194,145 @@ export const initiateForgotPassword = async (
 
 export const resetPassword = async (userData: Record<string, string>) => {
   const { newPassword, confirmPassword, email, token } = userData;
- 
+
   try {
     const decodedToken = jwt.verify(token, JWT_SECRET);
 
     const userId = (decodedToken as any).userId;
 
-     if ((decodedToken as any).email !== email) {
-      return { status: 400, message: "Invalid token" };
+    if ((decodedToken as any).email !== email) {
+      return { status: 400, message: "Invalid User Email" };
     }
 
     if (confirmPassword !== newPassword) {
       return { status: 400, message: "Passwords do not match." };
     }
 
-       const user = await prismaClient.user.findUnique({
-        where: { id:userId },
-      });
-  
-      if (!user) {
-        return { status: 404, message: "User record not found" };
-      }
+    const user = await prismaClient.user.findUnique({
+      where: { id: userId },
+    });
+
+    if (!user) {
+      return { status: 404, message: "User record not found" };
+    }
 
     const hashedPassword = await bcrypt.hash(newPassword, 10);
 
     const updatedUser = await prismaClient.user.update({
       where: { email: email },
-      data: { password: hashedPassword },
+      data: { password: hashedPassword, token:'' },
     });
     return {
       status: 200,
       message: "Password reset successful.",
       data: updatedUser,
+    };
+  } catch (error) {
+    return {
+      status: 500,
+      message: "An error occurred while resetting the password.",
+    };
+  }
+};
+
+export const resendUserActivationToken = async (email: string) => {
+  const user = await prismaClient.user.findUnique({
+    where: { email },
+  });
+
+  if (user?.status !== "pending") {
+    return { status: 403, message: "Account is not in pending state." };
+  }
+
+  if (!user) {
+    return { status: 404, message: "User not found" };
+  }
+  
+  const token = generateJwtToken({ userId: user.id, email });
+  const message_payload: EmailRequirement = {
+    to: [email],
+    subject: "Verify Email",
+    text: "You are welcome",
+    template: verifyEmail({ token }),
+  };
+  sendMail(message_payload);
+
+  await prismaClient.user.update({
+    where: { id: user.id },
+    data: { token },
+  });
+  return { status: 201, message: "Activation token resent successfully" };
+};
+
+export const verifyUserEmail = async (token: string) => {
+  try {
+    const decodedToken = jwt.verify(token, JWT_SECRET);
+
+    const { userId, email } = decodedToken as any;
+
+    const user = await prismaClient.user.findFirst({
+      where: {
+        AND: [{ email: email }, { id: userId }],
+      },
+    });
+
+    if (user?.status !== "pending") {
+      return { status: 403, message: "Account is not in pending state." };
+    }
+
+    if (!user) {
+      return { status: 404, message: "User not found or invalid token" };
+    }
+
+    const updatedUser = await prismaClient.user.update({
+      where: { id: userId },
+      data: { status: 'active',token:'' },
+    });
+
+    return {
+      status: 200,
+      message: "Account verified successfully .",
+      data: updatedUser,
+    };
+  } catch (error) {
+    return {
+      status: 500,
+      message: "An error occurred while resetting the password.",
+    };
+  }
+};
+
+export const updateCurrentPassword = async (passwordData: Record<string, string>, userId:string) => {
+  const {currentPassword, newPassword, confirmPassword } = passwordData;
+
+  try {
+    const user = await prismaClient.user.findUnique({
+      where: { id: userId },
+    });
+
+    if (!user) {
+      return { status: 404, message: "User record not found" };
+    }
+
+    const passwordMatch = await bcrypt.compare(currentPassword, user.password);
+
+    if (!passwordMatch) {
+      return { status: 401, message: "Invalid current password" };
+    }
+
+    if (confirmPassword !== newPassword) {
+      return { status: 400, message: "Passwords do not match." };
+    }
+
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+   await prismaClient.user.update({
+      where: { id: userId },
+      data: { password: hashedPassword },
+    });
+    return {
+      status: 200,
+      message: "Password reset successful."
     };
   } catch (error) {
     return {

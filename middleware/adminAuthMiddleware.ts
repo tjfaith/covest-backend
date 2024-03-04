@@ -12,7 +12,7 @@ declare global {
   }
 }
 
-export const authenticateUser = async(
+export const adminAuth = async(
   req: Request,
   res: Response,
   next: NextFunction

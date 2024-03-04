@@ -1,33 +1,28 @@
 import { Request, Response } from "express";
-import UserService from "@/services/userServices";
-
-export const createUser = async (req: Request, res: Response) => {
-  try {
-    const newUser = await UserService.createUser(req.body);
-    res.status(201).json(newUser);
-  }  catch (error: unknown) { 
-    res.status(400).json({ error: (error as Error).message }); 
-  }
-};
+import {updateUserService, getAllUsersService} from "@/services/userServices";
 
 
 export const updateUser = async (req: Request, res: Response) => {
 
   try {
-    const updatedUser = await UserService.updateUser(req.body, req.auth?.userId);
-    res.status(201).json(updatedUser);
+    const response = await updateUserService(req.body, req.auth?.userId);
+    res.status(response.status).json(response);
   }  catch (error: unknown) { 
-    res.status(400).json({ error: (error as Error).message }); 
+    let status: number = 500;
+    if (error instanceof Error && "status" in error) {
+      status = error.status as number;
+    }
+    res.status(status).json({
+      error: error instanceof Error ? error.message : "Internal Server Error",
+    });
   }
 };
 
 
 
-
-
 export const getAllUsers = async (req: Request, res: Response) => {
   try {
-    const users = await UserService.getAllUsers(); 
+    const users = await getAllUsersService(); 
     res.status(200).json(users);
   } catch (error: unknown) { 
     res.status(400).json({ error: (error as Error).message }); 
