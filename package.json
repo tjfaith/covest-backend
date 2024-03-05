@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "prisma generate",
+    "build": "prisma generate --schema=./database/prisma/schema.prisma",
     "dev": " nodemon index.ts",
     "start": "nodemon index.ts"
   },
@@ -29,12 +29,12 @@
   },
   "dependencies": {
     "@prisma/adapter-pg": "^5.9.1",
-    "@prisma/client": "^5.9.1",
+    "@prisma/client": "^5.10.2",
     "@types/paystack": "^2.0.4",
     "bcrypt": "^5.1.1",
     "body-parser": "^1.20.2",
     "cors": "^2.8.5",
-    "dotenv": "^16.4.1",
+    "dotenv": "^16.4.5",
     "express": "^4.18.2",
     "google-auth-library": "^9.6.3",
     "joi": "^17.12.1",

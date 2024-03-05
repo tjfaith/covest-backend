@@ -1,8 +1,8 @@
 import { prismaClient } from "@/database";
+import { verifyJWT } from "@/services";
 import { Request, Response, NextFunction } from "express";
 import jwt, { JwtPayload } from 'jsonwebtoken';
 
-const JWT_SECRET = process.env.JWT_SECRET as string
 
 declare global {
   namespace Express {
@@ -26,23 +26,25 @@ export const adminAuth = async(
   const token = authHeader.split(' ')[1];
 
   try {
-    const decodedToken = jwt.verify(token, JWT_SECRET) as JwtPayload;
+    const decodedToken = verifyJWT(token) as JwtPayload;
     
-    const userToken = await prismaClient.user.findFirst({
+    const adminFound = await prismaClient.user.findFirst({
       where: {
-        AND: [{ id: decodedToken.userId }, { token: token }],
+        AND: [{ id: decodedToken.userId }, { token: token }, { role: { not: 'user' } }],
       },
       select: {
         token: true,
+        role:true,
       },
     });
 
-    const isUserFound = !!userToken;
+    const isUserFound = !!adminFound;
     if (!isUserFound) {
-      return res.status(401).json({ message: 'Invalid or expired token' });
+      return res.status(401).json({ message: 'Not Authorized or invalid token' });
     }
 
     req.auth = decodedToken;
+    req.auth.role = adminFound.role
     next();
   } catch (error) {
     return res.status(401).json({ message: 'Invalid or expired token' });

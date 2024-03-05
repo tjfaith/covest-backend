@@ -3,7 +3,16 @@ import { Request, Response, NextFunction } from "express";
 
 // VALIDATE CREATE BOOT ADMIN
 const CreateBootAdminSchema = Joi.object({
-    
+  email: Joi.string().email().required(),
+  password: Joi.string()
+    .pattern(
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()\-_+={}[\]:;'",.<>?/\\]).{6,}$/
+    )
+    .required()
+    .messages({
+      "string.pattern.base":
+        "Password must contain at least one uppercase letter, one lowercase letter, one symbol, one number, and be at least 6 characters long",
+    }),
  });
  
  export const validateCreateBootAdmin = (
@@ -20,7 +29,8 @@ const CreateBootAdminSchema = Joi.object({
 
  // VALIDATE CREATE USER
 const CreateUserSchema = Joi.object({
-    
+  email: Joi.string().email().required(),
+  role:Joi.string().required()  
 });
 
 export const validateCreateUser = (

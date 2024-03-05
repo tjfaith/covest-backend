@@ -8,7 +8,7 @@ import {
   resendUserActivationToken,
   verifyUserEmail,
   updateCurrentPassword,
-} from "@/services/authServices";
+} from "@/services";
 
 export const userSignUp = async (req: Request, res: Response) => {
   try {

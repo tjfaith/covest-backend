@@ -1,5 +1,6 @@
 import { prismaClient} from '@/database';
-import { UserInstance } from '@/interfaces/userInterface';
+import { UserInstance } from '@/interfaces';
+
 
 export const updateUserService = async(userData:UserInstance, userId:string)=>{
   try {

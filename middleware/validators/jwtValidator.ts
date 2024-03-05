@@ -2,8 +2,8 @@ import Joi from "joi";
 import jwt from "jsonwebtoken";
 import { prismaClient } from "@/database";
 import { Request, Response, NextFunction } from "express";
+import { verifyJWT } from "@/services";
 
-const JWT_SECRET = process.env.JWT_SECRET as string;
 
 interface CustomError {
   error: {
@@ -27,7 +27,7 @@ const jwtSchema = Joi.object({
 
 const decodeJWT = async (token: string): Promise<CustomError | null> => {
   try {
-    const decodedToken = jwt.verify(token, JWT_SECRET);
+    const decodedToken = verifyJWT(token);
 
     const userToken = await prismaClient.user.findFirst({
       where: {

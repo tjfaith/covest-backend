@@ -1,8 +1,7 @@
 import { prismaClient } from "@/database";
+import { verifyJWT } from "@/services";
 import { Request, Response, NextFunction } from "express";
 import jwt, { JwtPayload } from 'jsonwebtoken';
-
-const JWT_SECRET = process.env.JWT_SECRET as string
 
 declare global {
   namespace Express {
@@ -26,7 +25,7 @@ export const authenticateUser = async(
   const token = authHeader.split(' ')[1];
 
   try {
-    const decodedToken = jwt.verify(token, JWT_SECRET) as JwtPayload;
+    const decodedToken = verifyJWT(token) as JwtPayload;
     
     const userToken = await prismaClient.user.findFirst({
       where: {

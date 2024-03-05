@@ -1,17 +1,16 @@
 import { Prisma, prismaClient } from "@/database";
 import bcrypt from "bcrypt";
-import jwt from "jsonwebtoken";
 import { OAuth2Client } from "google-auth-library";
 import { CreateUserInput, EmailRequirement } from "@/interfaces";
 import { Status } from "@prisma/client";
 
-const JWT_SECRET = process.env.JWT_SECRET as string;
 
 import {
   generateJwtToken,
   sendMail,
   verifyEmail,
   confirmForgotPasswordEmail,
+  verifyJWT,
 } from "@/services";
 import {
   GoogleLoginDetails,
@@ -196,7 +195,7 @@ export const resetPassword = async (userData: Record<string, string>) => {
   const { newPassword, confirmPassword, email, token } = userData;
 
   try {
-    const decodedToken = jwt.verify(token, JWT_SECRET);
+    const decodedToken = verifyJWT(token);
 
     const userId = (decodedToken as any).userId;
 
@@ -266,7 +265,7 @@ export const resendUserActivationToken = async (email: string) => {
 
 export const verifyUserEmail = async (token: string) => {
   try {
-    const decodedToken = jwt.verify(token, JWT_SECRET);
+    const decodedToken = verifyJWT(token);
 
     const { userId, email } = decodedToken as any;
 

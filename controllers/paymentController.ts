@@ -1,4 +1,4 @@
-import { initializePayment, verifyPaymentService } from "@/services/paymentServices";
+import { initializePayment, verifyPaymentService } from "@/services";
 import { Request, Response } from "express";
 
 export const initiatePayment = async (req: Request, res: Response) => {
