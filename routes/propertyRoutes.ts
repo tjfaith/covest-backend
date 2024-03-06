@@ -20,7 +20,7 @@ router.get(
   propertyController.getProperty
 );
 router.get(
-  "/get-single-property",
+  "/get-single-property/:property_id",
   authenticateUser,
   validateSingleProperty,
   propertyController.getSingleProperty
