@@ -20,7 +20,6 @@ const emailTransporter =(mailOptions:EmailRequirement)=>{
         if (error) {
             return console.error('Error occurred:', error);
         }
-        console.log('Message sent successfully:', info.response);
     });
 }
 

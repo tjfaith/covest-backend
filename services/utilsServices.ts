@@ -18,7 +18,6 @@ export const generateJwtToken = (
   encryptPayload: Record<string, string>,
   duration: string = "1h"
 ) => {
-  console.log(JWT_SECRET, 'secrete')
   return jwt.sign(encryptPayload, JWT_SECRET, { expiresIn: duration });
 };
 

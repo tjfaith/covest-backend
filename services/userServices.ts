@@ -13,7 +13,6 @@ export const updateUserService = async(userData:UserInstance, userId:string)=>{
   });
   return { status: 200, message: "Data Updated Successfully", data: updatedUser };
 } catch (error) {
-  console.log(error, 'error')
   return { status: 500, message: "Internal server error" };
 }
 

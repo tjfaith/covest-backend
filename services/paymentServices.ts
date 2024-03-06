@@ -1,6 +1,6 @@
 import { prismaClient } from "@/database";
 import { VerifyPayment, InitializePayment } from "@/interfaces";
-import axios from "axios";
+import { initializePaystack, verifyPaystack } from "@/services";
 
 export const initializePayment = async (payload: InitializePayment) => {
   const { amount, email, userId, propertyId } = payload;
@@ -31,21 +31,13 @@ export const initializePayment = async (payload: InitializePayment) => {
         data:{}
       };
     }
-    const response = await axios.post(
-      `${process.env.PAYSTACK_BASE_URL}/transaction/initialize`,
-      {
-        amount: amount * 100,
-        email: email,
-        billName: userId,
-      },
-      {
-        headers: {
-          authorization: `Bearer ${process.env.PAYSTACK_SECRET_KEY}`,
-          "content-type": "application/json",
-          "cache-control": "no-cache",
-        },
-      }
-    );
+
+    const response = await initializePaystack({
+      amount: amount * 100,
+      email: email,
+      billName: userId,
+    },)
+
 
     
     if (!response.data.data.reference) {
@@ -125,8 +117,7 @@ export const verifyPaymentService = async(paymentData:VerifyPayment)=>{
     };
   }
 
-  const response = await verifyPayment(paymentData.paymentRef);
-  console.log(response,'response')
+  const response = await verifyPaystack(paymentData.paymentRef);
   
   if(response.data.status !=='success'){
     return {
@@ -158,20 +149,4 @@ catch (error) {
 }
 }
 
-export const verifyPayment = async (paymentRef: string) => {
-  try {
-    const response = await axios.get(
-      `${process.env.PAYSTACK_BASE_URL}/transaction/verify/${paymentRef}`,
-      {
-        headers: {
-          authorization: `Bearer ${process.env.PAYSTACK_SECRET_KEY}`,
-          "content-type": "application/json",
-          "cache-control": "no-cache",
-        },
-      }
-    );
-    return response.data.data;
-  } catch (error) {
-    return error;
-  }
-};
+

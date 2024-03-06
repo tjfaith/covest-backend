@@ -27,10 +27,15 @@ enum PaymentStatus {
   failed
 }
 
+enum PropertyType {
+  general
+  land
+}
+
 model User {
   id                  String      @id @default(cuid())
   email               String      @unique
-  password            String      
+  password            String
   first_name          String?
   last_name           String?
   phone_number        String?
@@ -39,7 +44,7 @@ model User {
   date_of_birth       DateTime?
   address             String?
   city                String?
-  role                UserRole   @default(user)
+  role                UserRole    @default(user)
   state               String?
   country             String?
   status              Status      @default(pending)
@@ -53,7 +58,8 @@ model User {
   referrals           Referrals[] @relation("ReferringUser")
   main_user_referrals Referrals[] @relation("MainUser")
   payments            Payment[]
-  properties          Property[]
+  properties          Property[]  @relation("UserProperty")
+  properties_uploaded Property[]  @relation("RetailerProperty")
   created_at          DateTime    @default(now()) @map("created_at")
   updated_at          DateTime    @updatedAt @map("updated_at")
 }
@@ -85,27 +91,18 @@ model Payment {
 }
 
 model Property {
-  id               String    @id @default(cuid())
+  id               String       @id @default(cuid())
   title            String
   description      String
-  amount           Float
-  property_type    String
+  price            Float
+  property_type    PropertyType @default(general)
+  images           String
   property_details String
-  user             User?     @relation(fields: [user_id], references: [id])
-  retailer         Retailer? @relation(fields: [retailer_id], references: [id])
+  user             User?        @relation("UserProperty", fields: [user_id], references: [id])
+  retailer         User?        @relation("RetailerProperty", fields: [retailer_id], references: [id])
   payments         Payment[]
   user_id          String?
   retailer_id      String?
-  created_at       DateTime  @default(now()) @map("created_at")
-  updated_at       DateTime  @updatedAt @map("updated_at")
-}
-
-model Retailer {
-  id           String     @id @default(cuid())
-  full_name    String
-  email        String
-  phone_number String
-  properties   Property[]
-  created_at   DateTime   @default(now()) @map("created_at")
-  updated_at   DateTime   @updatedAt @map("updated_at")
+  created_at       DateTime     @default(now()) @map("created_at")
+  updated_at       DateTime     @updatedAt @map("updated_at")
 }

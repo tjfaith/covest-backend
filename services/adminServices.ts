@@ -1,4 +1,4 @@
-import { CreateBootAdmin, EmailRequirement } from "@/interfaces";
+import { CreateBootAdmin, EmailRequirement, LoginUserInput } from "@/interfaces";
 import { Prisma, prismaClient } from "@/database";
 import bcrypt from "bcrypt";
 
@@ -10,6 +10,7 @@ import {
     verifyEmail,
   } from "@/services";
 import { CreateUser, RoleType } from "@/interfaces/adminInterface";
+
 
 export const newBootAdmin =async(adminData:CreateBootAdmin)=>{
 
@@ -55,7 +56,6 @@ export const newBootAdmin =async(adminData:CreateBootAdmin)=>{
           data: '',
         };
       } catch (error) {
-        console.log(error)
         if (
           error instanceof Prisma.PrismaClientKnownRequestError &&
           error.code === "P2002"
@@ -140,7 +140,6 @@ export const newUser = async(adminData:CreateUser, adminRole:RoleType)=>{
       data: user,
     };
   } catch (error) {
-    console.log(error)
     if (
       error instanceof Prisma.PrismaClientKnownRequestError &&
       error.code === "P2002"
@@ -151,3 +150,99 @@ export const newUser = async(adminData:CreateUser, adminRole:RoleType)=>{
     }
   }
 }
+
+export const updateUserData = async(userData:any)=>{
+  try {
+  const admin = await prismaClient.user.findUnique({
+    where:{
+      id:userData.adminId
+    }
+  })
+
+  if(!admin){
+    return {
+      status:404,
+      message:'Admin data not found'
+    }
+  }
+  if(admin.role==='retailer'){
+    return{
+      status:401,
+      message:'You are not authorized to update a user details'
+    }
+  }
+
+  if(userData.role ==='boot_admin'){
+    return{
+      status:401,
+      message:'You are not authorized to update a user to be a Boot Admin'
+    }
+  }
+
+  const { userId, adminId, ...rest } = userData;
+    const updatedUser = await prismaClient.user.update({
+      where: { id: userId },
+      data: rest
+    });
+
+    return {
+      status:200,
+      message: 'user data updated successfully',
+      data:updatedUser
+    }
+  } catch (error) {
+    if (
+      error instanceof Prisma.PrismaClientKnownRequestError &&
+      error.code === "P2025"
+    ) {
+      return { status: 404, message: "User Record to update not found" };
+    } else {
+
+    return {
+      status:500,
+      message:'internal server error',
+      data:error
+    }
+  }
+  }
+}
+
+export const adminLoginService = async (userData: LoginUserInput) => {
+  const { email, password } = userData;
+
+  try {
+    const user = await prismaClient.user.findUnique({
+      where: { email },
+    });
+
+    if (!user) {
+      return { status: 404, message: "User not found" };
+    }
+
+    if(user.role ==='user'){
+      return { status: 404, message: "You are not authorized to use this route" };
+
+    }
+
+    const passwordMatch = await bcrypt.compare(password, user.password);
+
+    if (!passwordMatch) {
+      return { status: 401, message: "Invalid credentials" };
+    }
+
+    if (user.status === "pending") {
+      return { status: 403, message: "Account is pending approval." };
+    }
+
+    const token = generateJwtToken({ userId: user.id });
+
+    await prismaClient.user.update({
+      where: { id: user.id },
+      data: { token },
+    });
+
+    return { status: 200, message: "Sign in successful", data: { token } };
+  } catch (error) {
+    return { status: 500, message: "Internal server error" };
+  }
+};
