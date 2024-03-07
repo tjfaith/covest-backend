@@ -1,12 +1,13 @@
 import { prismaClient } from "@/database";
-import { AllPropertiesQuery, CreatePropertyInstance } from "@/interfaces";
+import { AllPropertiesQuery, CreatePropertyInstance, UpdatePropertyInstance } from "@/interfaces";
 import { PropertyType } from "@/interfaces/propertyInterface";
 
-import { uploadImage } from "@/services";
+import { deleteImage, uploadImage } from "@/services";
 
 export const newProperty = async (propertyData: CreatePropertyInstance) => {
   try {
     const images = [];
+    console.log(propertyData)
     if (propertyData.files) {
       for (const file of propertyData.files) {
         const result = await uploadImage(file, "COvest/property");
@@ -105,6 +106,85 @@ export const singleProperty = async (propertyId: string) => {
       status: 500,
       message: 'Internal Server Error',
       data: error
+    }
+  }
+}
+
+export const updateRetailerProperty = async(propertyData:UpdatePropertyInstance)=>{
+  try{ 
+    const retailer = await prismaClient.user.findUnique({
+    where:{id:propertyData.retailer_id}
+  })
+
+  const property = await prismaClient.property.findUnique({
+    where:{id:propertyData.property_id}
+  })
+
+  if(!retailer){
+    return {
+      status:404,
+      message:'The author of this property is not be found'
+    }
+  }
+
+  if(retailer.id !== property?.retailer_id && retailer.role ==='retailer'){
+    return {
+      status:401,
+      message:'You can\'t update this property'
+    }
+  }
+
+  if(!property){
+    return {
+      status:404,
+      message:'property not be found'
+    }
+  }
+
+  let property_images = JSON.parse(property.images)
+
+  let file_responses = []
+  if(propertyData.images_to_delete){
+    for (const file_id of propertyData.images_to_delete) {
+      const delete_file = await deleteImage(file_id);
+      if(delete_file.status === false){
+        file_responses.push(delete_file.response_message)
+      }else{
+        property_images = property_images.filter((item: { fileId: string; }) => item.fileId !== file_id);
+      }
+    }
+  }
+
+  const images = [];
+  if (propertyData.files) {
+    for (const file of propertyData.files) {
+      const result = await uploadImage(file, "COvest/property");
+      images.push(result);
+    }
+    property_images.push(...images)
+  }
+
+  console.log(property_images, 'PROPERTY IMAGES....')
+  propertyData.images= JSON.stringify(property_images)
+  const { property_id, images_to_delete, files, ...rest } = propertyData;
+
+  const updated_property = {...property, rest}
+
+  const updatedProperty = await prismaClient.property.update({
+    where: { id: property_id },
+    data: updated_property
+  });
+
+  return{
+    status:200,
+    message:'Property updated successfully',
+    data:{updatedProperty, file_responses}
+  }
+  }catch(error){
+    return{
+      status:500,
+      message:"Internal Server Error",
+      data:error
     }
   }
 }

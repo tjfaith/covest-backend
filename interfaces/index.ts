@@ -11,5 +11,5 @@ export {InitializePayment,VerifyPayment } from '@/interfaces/paymentInterface'
 export { CreateBootAdmin, RoleType } from "@/interfaces/adminInterface";
 
 // property interface
-export {CreatePropertyInstance, AllPropertiesQuery}  from '@/interfaces/propertyInterface'
+export {CreatePropertyInstance, AllPropertiesQuery,UpdatePropertyInstance }  from '@/interfaces/propertyInterface'
 

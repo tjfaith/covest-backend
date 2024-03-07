@@ -35,6 +35,7 @@ router.post(
 router.patch(
   "/update-property",
   adminAuth,
+  upload.array("images"),
   validateUpdateProperty,
   propertyController.updateProperty
 );

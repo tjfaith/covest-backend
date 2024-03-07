@@ -31,7 +31,14 @@ const CreatePropertySchema = Joi.object({
 
  // VALIDATE UPDATE PROPERTY
 const UpdatePropertySchema = Joi.object({
-    
+  property_id: Joi.string().required(),
+  title: Joi.string(),
+  description: Joi.string(),
+  price: Joi.string(),
+  images: Joi.array(),
+  images_to_delete:Joi.array(),
+  property_type:  PropertyType,
+  property_details: Joi.string()
 });
 
 export const validateUpdateProperty = (

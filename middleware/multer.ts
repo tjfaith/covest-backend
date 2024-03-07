@@ -7,7 +7,7 @@ const storage = multer.diskStorage({});
 
 const fileFilter = (req: Request, file: Express.Multer.File, cb: any) => {
   let ext = path.extname(file.originalname);
-  if (ext !== ".jpg" && ext !== ".jpeg" && ext !== ".png" && ext !== ".pdf") {
+  if (ext !== ".jpg" && ext !== ".jpeg" && ext !== ".png" && ext !== ".PNG" && ext !== ".JPG" && ext !== ".pdf") {
     cb(new Error("File type is not supported"), false);
     return;
   }
