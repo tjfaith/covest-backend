@@ -235,7 +235,6 @@ export const adminLoginService = async (userData: LoginUserInput) => {
     }
 
     const token = generateJwtToken({ userId: user.id });
-
     await prismaClient.user.update({
       where: { id: user.id },
       data: { token },
@@ -243,6 +242,6 @@ export const adminLoginService = async (userData: LoginUserInput) => {
 
     return { status: 200, message: "Sign in successful", data: { token } };
   } catch (error) {
-    return { status: 500, message: "Internal server error" };
+    return { status: 500, message: "Internal server error", data:error };
   }
 };

@@ -39,7 +39,10 @@ const UpdatePropertySchema = Joi.object({
   images_to_delete:Joi.array(),
   property_type:  PropertyType,
   property_details: Joi.string()
-});
+}).or('title', 'last_name', 'description', 'images', 'images_to_delete', 'property_type', 'property_details')
+.messages({
+  'object.missing': 'At least one field is required'
+});;
 
 export const validateUpdateProperty = (
   req: Request,
@@ -53,22 +56,7 @@ export const validateUpdateProperty = (
   next();
 };
 
- // VALIDATE UPDATE PROPERTY
- const DeletePropertySchema = Joi.object({
-    
- });
- 
- export const validateDeleteProperty = (
-   req: Request,
-   res: Response,
-   next: NextFunction
- ) => {
-   const { error } = DeletePropertySchema.validate(req.body);
-   if (error) {
-     return res.status(400).json({ error: error.details[0].message });
-   }
-   next();
- };
+
 
  // VALIDATE UPDATE PROPERTY
  const AllPropertiesSchema = Joi.object({
@@ -89,7 +77,7 @@ export const validateUpdateProperty = (
    next();
  };
 
-  // VALIDATE UPDATE PROPERTY
+  // VALIDATE GET SINGLE PROPERTY
   const SinglePropertySchema = Joi.object({
     property_id: Joi.string().required()
    });
@@ -105,3 +93,20 @@ export const validateUpdateProperty = (
      }
      next();
    };
+
+    // VALIDATE DELETE PROPERTY
+ const DeletePropertySchema = Joi.object({
+  property_id: Joi.string().required()
+ });
+ 
+ export const validateDeleteProperty = (
+   req: Request,
+   res: Response,
+   next: NextFunction
+ ) => {
+   const { error } = DeletePropertySchema.validate(req.params);
+   if (error) {
+     return res.status(400).json({ error: error.details[0].message });
+   }
+   next();
+ };

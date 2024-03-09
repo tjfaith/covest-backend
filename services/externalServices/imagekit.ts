@@ -39,7 +39,6 @@ export const deleteImage = async (file_id: string) => {
 
   try {
     const deleted_data = await imagekit.deleteFile(file_id);
-    console.log(deleted_data, 'delete file');
     return {
       status:true,
       response_message:'File deleted successfully',

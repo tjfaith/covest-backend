@@ -26,7 +26,6 @@ export const authenticateUser = async(
 
   try {
     const decodedToken = verifyJWT(token) as JwtPayload;
-    
     const userToken = await prismaClient.user.findFirst({
       where: {
         AND: [{ id: decodedToken.userId }, { token: token }],
@@ -44,6 +43,6 @@ export const authenticateUser = async(
     req.auth = decodedToken;
     next();
   } catch (error) {
-    return res.status(401).json({ message: 'Invalid or expired token' });
+    return res.status(401).json({ message: 'Invalid or expired token', data:error });
   }
 };

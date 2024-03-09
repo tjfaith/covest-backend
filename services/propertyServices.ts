@@ -1,4 +1,4 @@
-import { prismaClient } from "@/database";
+import { Prisma, prismaClient } from "@/database";
 import { AllPropertiesQuery, CreatePropertyInstance, UpdatePropertyInstance } from "@/interfaces";
 import { PropertyType } from "@/interfaces/propertyInterface";
 
@@ -7,7 +7,6 @@ import { deleteImage, uploadImage } from "@/services";
 export const newProperty = async (propertyData: CreatePropertyInstance) => {
   try {
     const images = [];
-    console.log(propertyData)
     if (propertyData.files) {
       for (const file of propertyData.files) {
         const result = await uploadImage(file, "COvest/property");
@@ -164,15 +163,20 @@ export const updateRetailerProperty = async(propertyData:UpdatePropertyInstance)
     property_images.push(...images)
   }
 
-  console.log(property_images, 'PROPERTY IMAGES....')
   propertyData.images= JSON.stringify(property_images)
-  const { property_id, images_to_delete, files, ...rest } = propertyData;
 
-  const updated_property = {...property, rest}
+  const { property_id, images_to_delete, files, ...rest } = propertyData;
+  const updated_property = {...property, ...rest}
+  const { id, created_at, updated_at, price,property_details, ...updateData } = updated_property;
 
   const updatedProperty = await prismaClient.property.update({
     where: { id: property_id },
-    data: updated_property
+    data: {
+      ...updateData,
+      price: typeof price === 'string' ? parseFloat(price) : price,
+      property_details: typeof property_details === 'string' ? property_details : JSON.stringify(property_details),
+    },
+    
   });
 
   return{
@@ -185,6 +189,52 @@ export const updateRetailerProperty = async(propertyData:UpdatePropertyInstance)
       status:500,
       message:"Internal Server Error",
       data:error
+    }
+  }
+}
+
+export const deleteSingleProperty = async (payload: Record<string, string>) => {
+  try {
+
+    const retailer = await prismaClient.user.findUnique({
+      where: { id: payload.retailer_id }
+    });
+
+    const property = await prismaClient.property.findUnique({
+      where: { id: payload.property_id }
+    });
+
+    if (!property) {
+      return { status: 404, message: 'Property not found' }
+    }
+
+    if(retailer?.role ==='retailer' && retailer?.id !== property.retailer_id){
+      return {status:401, message:'You are not authorized to delete this property, contact admin'}
+    }
+
+
+    let property_images = JSON.parse(property.images)
+    if(property_images.length>0){
+      for (const image of property_images) {
+         await deleteImage(image.fileId);
+      }
+    }
+
+    const deletedProperty = await prismaClient.property.delete({
+      where:{
+        id:property.id
+      }
+    })
+    return {
+      status: 200,
+      message: 'Property deleted successfully ',
+      data: deletedProperty
+    }
+  } catch (error) {
+    return {
+      status: 500,
+      message: 'Internal Server Error',
+      data: error
     }
   }
 }

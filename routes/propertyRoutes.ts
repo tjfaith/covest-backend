@@ -40,7 +40,7 @@ router.patch(
   propertyController.updateProperty
 );
 router.delete(
-  "/delete-property",
+  "/delete-property/:property_id",
   adminAuth,
   validateDeleteProperty,
   propertyController.deleteProperty

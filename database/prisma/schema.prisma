@@ -27,6 +27,11 @@ enum PaymentStatus {
   failed
 }
 
+enum PaymentType {
+  bank_transfer
+  online
+}
+
 enum PropertyType {
   general
   land
@@ -76,18 +81,19 @@ model Referrals {
 
 model Payment {
   id                   String        @id @default(cuid())
-  authorization_url    String
-  access_code          String
+  authorization_url    String?
+  access_code          String?
   amount               Float
   reference            String        @unique
   status               PaymentStatus @default(pending)
   user                 User?         @relation(fields: [user_id], references: [id])
   property             Property?     @relation(fields: [property_id], references: [id])
-  property_id          String?
-  user_id              String?
+  property_id          String
+  user_id              String
   created_at           DateTime      @default(now()) @map("created_at")
   updated_at           DateTime      @updatedAt @map("updated_at")
   payment_full_details String?
+  payment_type        PaymentType   
 }
 
 model Property {

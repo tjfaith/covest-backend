@@ -5,7 +5,7 @@ export { EmailRequirement } from '@/interfaces/emailInterface';
 export { CreateUserInput, LoginUserInput,UserInstance} from '@/interfaces/userInterface';
 
 // payment interface
-export {InitializePayment,VerifyPayment } from '@/interfaces/paymentInterface'
+export {InitializePayment,VerifyPayment, InitializeBankTransfer,VerifyBankTransfer } from '@/interfaces/paymentInterface'
 
 // admin interface
 export { CreateBootAdmin, RoleType } from "@/interfaces/adminInterface";

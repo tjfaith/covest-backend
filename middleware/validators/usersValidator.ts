@@ -21,7 +21,7 @@ const updateUserSchema = Joi.object({
 }).or('first_name', 'last_name', 'phone_number', 'gender', 'marital_status', 'date_of_birth', 'address', 'city', 'state', 'country', 'nok_full_name', 'nok_email', 'nok_phone_number', 'nok_relationship', 'nok_address')
 .messages({
   'object.missing': 'At least one field is required'
-});;
+});
 
 export const validateUpdateUser = (
   req: Request,

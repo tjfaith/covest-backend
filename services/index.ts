@@ -6,6 +6,7 @@ export {
   verifyEmail,
   adminVerifyEmail,
   confirmForgotPasswordEmail,
+  successfulBankTransfer
 } from "@/services/email/emailTemplate";
 
 // user services
@@ -15,6 +16,8 @@ export { updateUserService, getAllUsersService } from "@/services/userServices";
 export {
   initializePayment,
   verifyPaymentService,
+  initiateBankTransfer,
+  verifyTransfer,
 } from "@/services/paymentServices";
 
 // auth services
@@ -33,7 +36,7 @@ export {
 export { newBootAdmin, newUser, updateUserData,adminLoginService} from "@/services/adminServices";
 
 // property services
-export {newProperty, getAllProperties, singleProperty, updateRetailerProperty} from '@/services/propertyServices'
+export {newProperty, getAllProperties, singleProperty, updateRetailerProperty, deleteSingleProperty} from '@/services/propertyServices'
 
 // util services
 export { generateUniqueId, generateJwtToken, verifyJWT, generatePassword } from "@/services/utilsServices";

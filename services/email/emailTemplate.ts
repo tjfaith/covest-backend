@@ -3,7 +3,7 @@ export const confirmForgotPasswordEmail = (payload: Record<string, string>) => {
 
   <div style="max-width: 600px; margin: 0 auto; padding: 20px; font-family: 'Roboto', sans-serif; background-color: #f9f9f9; border-radius: 10px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);">
     <div style="text-align: center; margin-bottom: 20px;">
-        <img src="https://res.cloudinary.com/tjfaith/image/upload/v1707860143/logo_ahnhbz.png" alt="COvest Logo" style="width: 50px; height: 50px; margin-right: 10px;">
+        <img src="https://ik.imagekit.io/o59kpgo8iz/COvest/logo.png?updatedAt=1709921490645" alt="COvest Logo" style="width: 50px; height: 50px; margin-right: 10px;">
         <span style="font-weight: bold; font-size: 24px; color: #333;">COvest</span>
     </div>
     <div style="border: 1px solid #ddd; border-radius: 5px; padding: 20px; background-color: #fff;">
@@ -27,7 +27,7 @@ export const verifyEmail = (payload: Record<string, string>) => {
   return `
     <div style="max-width: 600px; margin: 0 auto; padding: 20px; font-family: 'Roboto', sans-serif; background-color: #f9f9f9; border-radius: 10px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);">
     <div style="text-align: center; margin-bottom: 20px;">
-        <img src="https://res.cloudinary.com/tjfaith/image/upload/v1707860143/logo_ahnhbz.png" alt="COvest Logo" style="width: 50px; height: 50px; margin-right: 10px;">
+        <img src="https://ik.imagekit.io/o59kpgo8iz/COvest/logo.png?updatedAt=1709921490645" alt="COvest Logo" style="width: 50px; height: 50px; margin-right: 10px;">
         <span style="font-weight: bold; font-size: 24px; color: #333;">COvest</span>
     </div>
     <div style="border: 1px solid #ddd; border-radius: 5px; padding: 20px; background-color: #fff;">
@@ -52,7 +52,7 @@ export const adminVerifyEmail = (payload: Record<string, string>) => {
     return `
       <div style="max-width: 600px; margin: 0 auto; padding: 20px; font-family: 'Roboto', sans-serif; background-color: #f9f9f9; border-radius: 10px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);">
       <div style="text-align: center; margin-bottom: 20px;">
-          <img src="https://res.cloudinary.com/tjfaith/image/upload/v1707860143/logo_ahnhbz.png" alt="COvest Logo" style="width: 50px; height: 50px; margin-right: 10px;">
+          <img src="https://ik.imagekit.io/o59kpgo8iz/COvest/logo.png?updatedAt=1709921490645" alt="COvest Logo" style="width: 50px; height: 50px; margin-right: 10px;">
           <span style="font-weight: bold; font-size: 24px; color: #333;">COvest</span>
       </div>
       <div style="border: 1px solid #ddd; border-radius: 5px; padding: 20px; background-color: #fff;">
@@ -73,6 +73,39 @@ export const adminVerifyEmail = (payload: Record<string, string>) => {
   </div>
       `;
   };
+
+
+  export const successfulBankTransfer = (payload: Record<string, string | number>) => {
+    return `
+      <div style="max-width: 600px; margin: 0 auto; padding: 20px; font-family: 'Roboto', sans-serif; background-color: #f9f9f9; border-radius: 10px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);">
+      <div style="text-align: center; margin-bottom: 20px;">
+          <img src="https://ik.imagekit.io/o59kpgo8iz/COvest/logo.png?updatedAt=1709921490645" alt="COvest Logo" style="width: 50px; height: 50px; margin-right: 10px;">
+          <span style="font-weight: bold; font-size: 24px; color: #333;">COvest</span>
+      </div>
+      <div style="border: 1px solid #ddd; border-radius: 5px; padding: 20px; background-color: #fff;">
+          <div style="margin-bottom: 20px;">
+              <h2 style="margin: 0 0 10px; color: #333;">Bank Transfer Successful</h2>
+              <div style="margin: 0; color: #555;">
+              Your bank transfer of ${payload.amount} to:
+              <ul style="list-style-type: none; padding: 0;">
+                  <li><strong>Bank Name:</strong> ${payload.bankName}</li>
+                  <li><strong>Account Name:</strong> ${payload.accountName}</li>
+                  <li><strong>Account Number:</strong> ${payload.accountNumber}</li>
+              </ul>
+              has been successfully processed. However, the record is currently pending verification by our admin team.
+          </div>
+          </div>
+          <div style="margin-top: 20px; color: #777;">
+              Please be patient as our team verifies your transaction. If you have any questions or concerns, feel free to reach out to us at <a href="mailto:help@coovestafrica.com" style="color: #777; text-decoration: none;">help@coovestafrica.com</a>.
+          </div>
+      </div>
+      <div style="text-align: center; margin-top: 20px; color: #777; font-size: 14px;">
+          &copy; COvest Inc <script>document.write(new Date().getFullYear());</script> Modern Payments for Africa
+      </div>
+  </div>
+      `;
+};
+
 
 export const emailTemplate = () => {
   ``;
