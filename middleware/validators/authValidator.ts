@@ -30,12 +30,7 @@ export const validateCreateUserInput = (
 // VALIDATE LOGIN USER
 const loginUserSchema = Joi.object({
   email: Joi.string().email().required(),
-  password: Joi.string().pattern(
-    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()\-_+={}[\]:;'",.<>?/\\]).{6,}$/
-  ).required().messages({
-    "string.pattern.base":
-      "Password must contain at least one uppercase letter, one lowercase letter, one symbol, one number, and be at least 6 characters long",
-  }),
+  password: Joi.string().required(),
 });
 
 export const validateLoginUserInput = (
