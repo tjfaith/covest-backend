@@ -1,0 +1,948 @@
+{
+	"info": {
+		"_postman_id": "a4496609-2900-455b-bb60-11a3cdbef09a",
+		"name": "covest",
+		"description": "# 🚀 Get started here\n\nThis template guides you through CRUD operations (GET, POST, PUT, DELETE), variables, and tests.\n\n## 🔖 **How to use this template**\n\n#### **Step 1: Send requests**\n\nRESTful APIs allow you to perform CRUD operations using the POST, GET, PUT, and DELETE HTTP methods.\n\nThis collection contains each of these [request](https://learning.postman.com/docs/sending-requests/requests/) types. Open each request and click \"Send\" to see what happens.\n\n#### **Step 2: View responses**\n\nObserve the response tab for status code (200 OK), response time, and size.\n\n#### **Step 3: Send new Body data**\n\nUpdate or add new data in \"Body\" in the POST request. Typically, Body data is also used in PUT request.\n\n```\n{\n    \"name\": \"Add your name in the body\"\n}\n\n ```\n\n#### **Step 4: Update the variable**\n\nVariables enable you to store and reuse values in Postman. We have created a [variable](https://learning.postman.com/docs/sending-requests/variables/) called `base_url` with the sample request [https://postman-api-learner.glitch.me](https://postman-api-learner.glitch.me). Replace it with your API endpoint to customize this collection.\n\n#### **Step 5: Add tests in the \"Tests\" tab**\n\nTests help you confirm that your API is working as expected. You can write test scripts in JavaScript and view the output in the \"Test Results\" tab.\n\n<img src=\"https://content.pstmn.io/b5f280a7-4b09-48ec-857f-0a7ed99d7ef8/U2NyZWVuc2hvdCAyMDIzLTAzLTI3IGF0IDkuNDcuMjggUE0ucG5n\">\n\n## 💪 Pro tips\n\n- Use folders to group related requests and organize the collection.\n- Add more [scripts](https://learning.postman.com/docs/writing-scripts/intro-to-scripts/) in \"Tests\" to verify if the API works as expected and execute workflows.\n    \n\n## 💡Related templates\n\n[API testing basics](https://go.postman.co/redirect/workspace?type=personal&collectionTemplateId=e9a37a28-055b-49cd-8c7e-97494a21eb54&sourceTemplateId=ddb19591-3097-41cf-82af-c84273e56719)  \n[API documentation](https://go.postman.co/redirect/workspace?type=personal&collectionTemplateId=e9c28f47-1253-44af-a2f3-20dce4da1f18&sourceTemplateId=ddb19591-3097-41cf-82af-c84273e56719)  \n[Authorization methods](https://go.postman.co/redirect/workspace?type=personal&collectionTemplateId=31a9a6ed-4cdf-4ced-984c-d12c9aec1c27&sourceTemplateId=ddb19591-3097-41cf-82af-c84273e56719)",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "32914944",
+		"_collection_link": "https://red-firefly-167008.postman.co/workspace/Team-Workspace~fafc4ba1-699b-429d-8198-3c2a86eb0065/collection/32914944-a4496609-2900-455b-bb60-11a3cdbef09a?action=share&source=collection_link&creator=32914944"
+	},
+	"item": [
+		{
+			"name": "Users",
+			"item": [
+				{
+					"name": "All Users",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{COVEST_BASE_URL}}/api/users/all",
+							"host": [
+								"{{COVEST_BASE_URL}}"
+							],
+							"path": [
+								"api",
+								"users",
+								"all"
+							]
+						},
+						"description": "This is a GET request and it is used to \"get\" data from an endpoint. There is no request body for a GET request, but you can use query parameters to help specify the resource you want data on (e.g., in this request, we have `id=1`).\n\nA successful GET response will have a `200 OK` status, and should include some kind of response body - for example, HTML web content or JSON data."
+					},
+					"response": []
+				},
+				{
+					"name": "update-data",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJjbHQ5dWZsMnAwMDAwbWs3d2l0Yzd0ZmhrIiwiaWF0IjoxNzA5Mzg5MDA4LCJleHAiOjE3MDkzOTI2MDh9.ZSwaRk3kqF2XUry5k-RLaGWALxIDujbv1aQUOf8WEXw",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "",
+								"value": "",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n      \"first_name\": \"string\",\r\n  \"last_name\": \"string\",\r\n  \"phone_number\": \"string\",\r\n  \"gender\": \"male\",\r\n  \"marital_status\": \"single\",\r\n  \"date_of_birth\": \"1990-01-01T00:00:00.000Z\",\r\n  \"address\": \"string\",\r\n  \"city\": \"string\",\r\n  \"state\":\"string\",\r\n  \"country\": \"string\",\r\n  \"nok_full_name\":\"string\",\r\n  \"nok_email\":\"string\",\r\n  \"nok_phone_number\":\"string\",\r\n  \"nok_relationship\":\"string\",\r\n  \"nok_address\":\"string\"  \r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{COVEST_BASE_URL}}/api/users/update-data",
+							"host": [
+								"{{COVEST_BASE_URL}}"
+							],
+							"path": [
+								"api",
+								"users",
+								"update-data"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "signup",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t   \"email\": \"a.tjfaith@gmail.com\",\n        \"password\": \"Oghenetejiri123456#\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{COVEST_BASE_URL}}/api/auth/signup",
+							"host": [
+								"{{COVEST_BASE_URL}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"signup"
+							]
+						},
+						"description": "This is a POST request, submitting data to an API via the request body. This request submits JSON data, and the data is reflected in the response.\n\nA successful POST request typically returns a `200 OK` or `201 Created` response code."
+					},
+					"response": []
+				},
+				{
+					"name": "login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\t   \"email\": \"a.tjfaith@gmail.com\",\r\n        \"password\": \"Oghenetejiri123456#\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{COVEST_BASE_URL}}/api/auth/login",
+							"host": [
+								"{{COVEST_BASE_URL}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "google-auth",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"idToken\":\"eyJhbGciOiJSUzI1NiIsImtpZCI6IjU1YzE4OGE4MzU0NmZjMTg4ZTUxNTc2YmE3MjgzNmUwNjAwZThiNzMiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJodHRwczovL2FjY291bnRzLmdvb2dsZS5jb20iLCJhenAiOiIzMjgwMjU1NzIyMTUtbTNtcGRnMmthdHZjb2Zwb205bmV1ZG51dmkwMWU4ZmYuYXBwcy5nb29nbGV1c2VyY29udGVudC5jb20iLCJhdWQiOiIzMjgwMjU1NzIyMTUtbTNtcGRnMmthdHZjb2Zwb205bmV1ZG51dmkwMWU4ZmYuYXBwcy5nb29nbGV1c2VyY29udGVudC5jb20iLCJzdWIiOiIxMDUwMTQ4NzczNzA2NjY4OTM2NDUiLCJlbWFpbCI6InRqZmFpdGhwcm9AZ21haWwuY29tIiwiZW1haWxfdmVyaWZpZWQiOnRydWUsIm5iZiI6MTcwOTA1NzM2NiwibmFtZSI6IkZhaXRoIE9naGVuZXRlamlyaSIsInBpY3R1cmUiOiJodHRwczovL2xoMy5nb29nbGV1c2VyY29udGVudC5jb20vYS9BQ2c4b2NLUWpBRGg0YW9JNjRGZjJQRnVrbDRtUi1MY1ltTUlpN2QyMXRVY2RNektXQT1zOTYtYyIsImdpdmVuX25hbWUiOiJGYWl0aCIsImZhbWlseV9uYW1lIjoiT2doZW5ldGVqaXJpIiwibG9jYWxlIjoiZW4tR0IiLCJpYXQiOjE3MDkwNTc2NjYsImV4cCI6MTcwOTA2MTI2NiwianRpIjoiZGQ0MGFjZGIwY2FmMDRiZjhiZTYxZjA5NzkyOTA5YWU3MGExYjljMCJ9.mSl0AHKCOXTnnejW9qDCw0WigAvhO3gMZ9h4PEo3pZIrlOcnYxdTjPCYQf_NywGWjxO7RCQrbqxbOMJlfIFoGSXT7F9frAQ_fSm94Bb9MAEE4HK6KZbxmDHiW1PnsQYMXvHM43pFgWcmJf2JvSnAginQqlL0A_7aZSsxnk9yOmA2JiD4OaoO997DqFeL2_kCy9m2rGE2KMJCNc6vwtpo4s1OHtb4c6zu6I5npA_X0oaN8AfqGzD-jsXbTP8MVKCXI2REvmYVlIoqXOdhXYsnHMx6x6siLz7OiYaJTezt2R9Tdw2vkxO83rraMPA18kZ4rdCJvTchOWevorLe155VWw\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{COVEST_BASE_URL}}/api/auth/google-auth",
+							"host": [
+								"{{COVEST_BASE_URL}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"google-auth"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "initiate-forgot-password",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\":\"a.tjfaith@gmail.com\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{COVEST_BASE_URL}}/api/auth/initiate-forgot-password",
+							"host": [
+								"{{COVEST_BASE_URL}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"initiate-forgot-password"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "reset-password",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\":\"a.tjfaith@gmail.com\",\r\n    \"newPassword\":\"Oghenetejiri123456#\",\r\n    \"confirmPassword\":\"Oghenetejiri123456#\",\r\n    \"token\":\"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJjbHQ5dWZsMnAwMDAwbWs3d2l0Yzd0ZmhrIiwiZW1haWwiOiJhLnRqZmFpdGhAZ21haWwuY29tIiwiaWF0IjoxNzA5Mzk3ODEzLCJleHAiOjE3MDk0MDE0MTN9.hq7a27jL-kg3uTh8eNQ_tjWRK5MnywUHOagSJIQJhU0\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{COVEST_BASE_URL}}/api/auth/reset-password",
+							"host": [
+								"{{COVEST_BASE_URL}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"reset-password"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "verify-email",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{COVEST_BASE_URL}}/api/auth/verify-email/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJjbHRnNDMwYXMwMDAwNzR0dHRpangxc2YzIiwiZW1haWwiOiJ0amJlbmJpekBnbWFpbC5jb20iLCJpYXQiOjE3MDk3NDg0NTIsImV4cCI6MTcwOTc1MjA1Mn0.FU254e_QrNvLa_sCMHXaiC2SEjG1rq8ossrUsh9IO-8",
+							"host": [
+								"{{COVEST_BASE_URL}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"verify-email",
+								"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJjbHRnNDMwYXMwMDAwNzR0dHRpangxc2YzIiwiZW1haWwiOiJ0amJlbmJpekBnbWFpbC5jb20iLCJpYXQiOjE3MDk3NDg0NTIsImV4cCI6MTcwOTc1MjA1Mn0.FU254e_QrNvLa_sCMHXaiC2SEjG1rq8ossrUsh9IO-8"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "resend-activation-token",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\":\"a.tjfaith@gmail.com\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{COVEST_BASE_URL}}/api/auth/resend-activation-token",
+							"host": [
+								"{{COVEST_BASE_URL}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"resend-activation-token"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update-password",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJjbHQ5dWZsMnAwMDAwbWs3d2l0Yzd0ZmhrIiwiaWF0IjoxNzA5Mzg5MDA4LCJleHAiOjE3MDkzOTI2MDh9.ZSwaRk3kqF2XUry5k-RLaGWALxIDujbv1aQUOf8WEXw",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \r\n    \"currentPassword\":\"Oghenetejiri123456#\",\r\n    \"newPassword\":\"Oghenetejiri123456#\",\r\n    \"confirmPassword\":\"Oghenetejiri123456#\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{COVEST_BASE_URL}}/api/auth/update-password",
+							"host": [
+								"{{COVEST_BASE_URL}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"update-password"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Payment",
+			"item": [
+				{
+					"name": "initiate-payment",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJjbHRkMjZqNDYwMDAxajE1MWNtaTFwNnNhIiwiaWF0IjoxNzA5NTc0NDQ4LCJleHAiOjE3MDk1NzgwNDh9.U1t-LQRJRwHhV_n50KXaCFGKOtPEs_OvCsuHyE62MFc",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\":\"a.tjfaith@gmail.com\",\r\n    \"amount\":100,\r\n    \"propertyId\":\"dddddd\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{COVEST_BASE_URL}}/api/payment/initiate-payment",
+							"host": [
+								"{{COVEST_BASE_URL}}"
+							],
+							"path": [
+								"api",
+								"payment",
+								"initiate-payment"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "initiate-bank-transfer",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJjbHRqdXNteDYwMDAwMWFta2x6c2V5bDhpIiwiaWF0IjoxNzA5OTc5MTM5LCJleHAiOjE3MDk5ODI3Mzl9.9JSWrF5HO8owkgla8gSTNZ2xd_oPXw_CLj4RWP44viM",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "paymentRef",
+									"value": "1234567890Raf",
+									"type": "text"
+								},
+								{
+									"key": "amount",
+									"value": "1000.4",
+									"type": "text"
+								},
+								{
+									"key": "payment_prof",
+									"type": "file",
+									"src": "/C:/Users/TJFaith/Pictures/old loan form.PNG"
+								},
+								{
+									"key": "property_id",
+									"value": "cltjxhoc40001mn1gu7wwd6zw",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{COVEST_BASE_URL}}/api/payment/initiate-bank-transfer",
+							"host": [
+								"{{COVEST_BASE_URL}}"
+							],
+							"path": [
+								"api",
+								"payment",
+								"initiate-bank-transfer"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "verify-payment",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJjbHRkMjZqNDYwMDAxajE1MWNtaTFwNnNhIiwiaWF0IjoxNzA5NTc0NDQ4LCJleHAiOjE3MDk1NzgwNDh9.U1t-LQRJRwHhV_n50KXaCFGKOtPEs_OvCsuHyE62MFc",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"paymentRef\":\"lymlpl3vxv\",\r\n    \"amount\":100\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{COVEST_BASE_URL}}/api/payment/verify-payment",
+							"host": [
+								"{{COVEST_BASE_URL}}"
+							],
+							"path": [
+								"api",
+								"payment",
+								"verify-payment"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "verify-bank-transfer",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJjbHRnNDMwYXMwMDAwNzR0dHRpangxc2YzIiwiaWF0IjoxNzA5OTgzMTk4LCJleHAiOjE3MDk5ODY3OTh9.kCv7_Oh3VlR6kw9bWqmdgoIwOoc16FN84Cwh0KiQl00",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"payment_id\":\"cltjxmj7z000110u4uhadwxp7\",\r\n    \"property_id\":\"cltjxhoc40001mn1gu7wwd6zw\",\r\n    \"payee_id\":\"cltjusmx600001amklzseyl8i\",\r\n    \"paymentProfID\":\"65ec374c88c257da3386f0c4\",\r\n    \"amount\":1000.4,\r\n    \"paymentRef\":\"1234567890Raf\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{COVEST_BASE_URL}}/api/payment/verify-bank-transfer",
+							"host": [
+								"{{COVEST_BASE_URL}}"
+							],
+							"path": [
+								"api",
+								"payment",
+								"verify-bank-transfer"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Property",
+			"item": [
+				{
+					"name": "get-all-property",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJjbHRnNDMwYXMwMDAwNzR0dHRpangxc2YzIiwiaWF0IjoxNzA5NzUxMzg5LCJleHAiOjE3MDk3NTQ5ODl9.wPMqm05BUdbQRZSDdGbEKV2YEjOcyA7cnv8HvAf-rOc",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{COVEST_BASE_URL}}/api/property/get-all-property?pageNumber=1&pageSize=1&propertyType=general",
+							"host": [
+								"{{COVEST_BASE_URL}}"
+							],
+							"path": [
+								"api",
+								"property",
+								"get-all-property"
+							],
+							"query": [
+								{
+									"key": "pageNumber",
+									"value": "1"
+								},
+								{
+									"key": "pageSize",
+									"value": "1"
+								},
+								{
+									"key": "propertyType",
+									"value": "general"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get-single-property",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJjbHRnNDMwYXMwMDAwNzR0dHRpangxc2YzIiwiaWF0IjoxNzA5NzUxMzg5LCJleHAiOjE3MDk3NTQ5ODl9.wPMqm05BUdbQRZSDdGbEKV2YEjOcyA7cnv8HvAf-rOc",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{COVEST_BASE_URL}}/api/property/get-single-property/cltg4q4ag00019pklaf1a5i7a",
+							"host": [
+								"{{COVEST_BASE_URL}}"
+							],
+							"path": [
+								"api",
+								"property",
+								"get-single-property",
+								"cltg4q4ag00019pklaf1a5i7a"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create-property",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJjbHRnNDMwYXMwMDAwNzR0dHRpangxc2YzIiwiaWF0IjoxNzA5OTc5MjE0LCJleHAiOjE3MDk5ODI4MTR9.jS-YBR954dvPLS3c5TnPI7XmYq5RpCcOq-GoNNkCra8",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "title",
+									"value": "3 Bed Room Flat",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "This is a fully detached building",
+									"type": "text"
+								},
+								{
+									"key": "price",
+									"value": "30000",
+									"type": "text"
+								},
+								{
+									"key": "images",
+									"type": "file",
+									"src": "/C:/Users/TJFaith/Pictures/Fauzi/WhatsApp Image 2023-02-27 at 8.12.54 PM (1).jpeg"
+								},
+								{
+									"key": "property_type",
+									"value": "general",
+									"type": "text"
+								},
+								{
+									"key": "property_details",
+									"value": "[]",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{COVEST_BASE_URL}}/api/property/create-property",
+							"host": [
+								"{{COVEST_BASE_URL}}"
+							],
+							"path": [
+								"api",
+								"property",
+								"create-property"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update-property",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJjbHRnNDMwYXMwMDAwNzR0dHRpangxc2YzIiwiaWF0IjoxNzA5OTA0MTYxLCJleHAiOjE3MDk5MDc3NjF9.YERoe7L5-TFvyFn-qY3pZK4VkIL_HQVb5j8P97ACJeo",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "images_to_delete",
+									"value": "65eaf12488c257da3352595c",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "images_to_delete",
+									"value": "65eaf12688c257da33525d45",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "images_to_delete",
+									"value": "65eaf12788c257da33526074",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "images",
+									"type": "file",
+									"src": "/C:/Users/TJFaith/Pictures/IMG_9440.JPG",
+									"disabled": true
+								},
+								{
+									"key": "property_id",
+									"value": "cltijwz920001wcmru7ef3zhm",
+									"type": "text"
+								},
+								{
+									"key": "title",
+									"value": "House3",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "new house",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "price",
+									"value": "400000",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{COVEST_BASE_URL}}/api/property/update-property",
+							"host": [
+								"{{COVEST_BASE_URL}}"
+							],
+							"path": [
+								"api",
+								"property",
+								"update-property"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete-property",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJjbHRnNDMwYXMwMDAwNzR0dHRpangxc2YzIiwiaWF0IjoxNzA5OTExNTYwLCJleHAiOjE3MDk5MTUxNjB9.-WQFuJBJ9rzATHKHyVT707L7tPGvmJh-pGipbFqqiWU",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{COVEST_BASE_URL}}/api/property/delete-property/cltit7rtx00012b176mqbbb20",
+							"host": [
+								"{{COVEST_BASE_URL}}"
+							],
+							"path": [
+								"api",
+								"property",
+								"delete-property",
+								"cltit7rtx00012b176mqbbb20"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Admin",
+			"item": [
+				{
+					"name": "create-boot-admin",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\":\"tjbenbiz@gmail.com\",\r\n    \"password\":\"Oghenetejiri123456#\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{COVEST_BASE_URL}}/api/admin/create-boot-admin",
+							"host": [
+								"{{COVEST_BASE_URL}}"
+							],
+							"path": [
+								"api",
+								"admin",
+								"create-boot-admin"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create-user",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJjbHRkcXB0OTMwMDAxOHM3eGw5cHI1enFwIiwiaWF0IjoxNzA5NjU1NTA1LCJleHAiOjE3MDk2NTkxMDV9.Us6sTlkSREnUjpJuiZplHlO0Jg0bUaBN60gbGrrIp58",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\":\"faithakpeghughu@gmail.com\",\r\n    \"role\":\"retailer\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{COVEST_BASE_URL}}/api/admin/create-user",
+							"host": [
+								"{{COVEST_BASE_URL}}"
+							],
+							"path": [
+								"api",
+								"admin",
+								"create-user"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update-user",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJjbHRkbzgxYmYwMDAwdXIzY3BqMWV0MXRkIiwiaWF0IjoxNzA5NjkxMjA0LCJleHAiOjE3MDk2OTQ4MDR9.graatDfGMCuhGB8CzzGUVnNACNyYNrHjtt45Ntlg02U",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"role\":\"retailer\",\r\n    \"userId\":\"eee\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{COVEST_BASE_URL}}/api/admin/update-user",
+							"host": [
+								"{{COVEST_BASE_URL}}"
+							],
+							"path": [
+								"api",
+								"admin",
+								"update-user"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "admin-login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\":\"tjbenbiz@gmail.com\",\r\n    \"password\":\"Oghenetejiri123456#\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{COVEST_BASE_URL}}/api/admin/admin-login",
+							"host": [
+								"{{COVEST_BASE_URL}}"
+							],
+							"path": [
+								"api",
+								"admin",
+								"admin-login"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "id",
+			"value": "1"
+		},
+		{
+			"key": "base_url",
+			"value": "https://postman-rest-api-learner.glitch.me/"
+		},
+		{
+			"key": "COVEST_BASE_URL",
+			"value": "http://127.0.0.1:7000"
+		}
+	]
+}

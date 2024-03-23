@@ -1,0 +1,517 @@
+openapi: 3.0.0
+info:
+  title: covest
+  description: >-
+    
+  version: 1.0.0
+servers:
+  - url: http://127.0.0.1:7000
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+tags:
+  - name: Users
+  - name: Auth
+  - name: Payment
+  - name: Property
+  - name: Admin
+paths:
+  /api/users/all:
+    get:
+      tags:
+        - Users
+      summary: All Users
+      description: >-
+        This is a GET request and it is used to "get" data from an endpoint.
+        There is no request body for a GET request, but you can use query
+        parameters to help specify the resource you want data on (e.g., in this
+        request, we have `id=1`).
+
+
+        A successful GET response will have a `200 OK` status, and should
+        include some kind of response body - for example, HTML web content or
+        JSON data.
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /api/users/update-data:
+    patch:
+      tags:
+        - Users
+      summary: update-data
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                first_name: string
+                last_name: string
+                phone_number: string
+                gender: male
+                marital_status: single
+                date_of_birth: '1990-01-01T00:00:00.000Z'
+                address: string
+                city: string
+                state: string
+                country: string
+                nok_full_name: string
+                nok_email: string
+                nok_phone_number: string
+                nok_relationship: string
+                nok_address: string
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /api/auth/signup:
+    post:
+      tags:
+        - Auth
+      summary: signup
+      description: >-
+        This is a POST request, submitting data to an API via the request body.
+        This request submits JSON data, and the data is reflected in the
+        response.
+
+
+        A successful POST request typically returns a `200 OK` or `201 Created`
+        response code.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                email: a.tjfaith@gmail.com
+                password: Oghenetejiri123456#
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /api/auth/login:
+    post:
+      tags:
+        - Auth
+      summary: login
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                email: a.tjfaith@gmail.com
+                password: Oghenetejiri123456#
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /api/auth/google-auth:
+    post:
+      tags:
+        - Auth
+      summary: google-auth
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                idToken: >-
+                  eyJhbGciOiJSUzI1NiIsImtpZCI6IjU1YzE4OGE4MzU0NmZjMTg4ZTUxNTc2YmE3MjgzNmUwNjAwZThiNzMiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJodHRwczovL2FjY291bnRzLmdvb2dsZS5jb20iLCJhenAiOiIzMjgwMjU1NzIyMTUtbTNtcGRnMmthdHZjb2Zwb205bmV1ZG51dmkwMWU4ZmYuYXBwcy5nb29nbGV1c2VyY29udGVudC5jb20iLCJhdWQiOiIzMjgwMjU1NzIyMTUtbTNtcGRnMmthdHZjb2Zwb205bmV1ZG51dmkwMWU4ZmYuYXBwcy5nb29nbGV1c2VyY29udGVudC5jb20iLCJzdWIiOiIxMDUwMTQ4NzczNzA2NjY4OTM2NDUiLCJlbWFpbCI6InRqZmFpdGhwcm9AZ21haWwuY29tIiwiZW1haWxfdmVyaWZpZWQiOnRydWUsIm5iZiI6MTcwOTA1NzM2NiwibmFtZSI6IkZhaXRoIE9naGVuZXRlamlyaSIsInBpY3R1cmUiOiJodHRwczovL2xoMy5nb29nbGV1c2VyY29udGVudC5jb20vYS9BQ2c4b2NLUWpBRGg0YW9JNjRGZjJQRnVrbDRtUi1MY1ltTUlpN2QyMXRVY2RNektXQT1zOTYtYyIsImdpdmVuX25hbWUiOiJGYWl0aCIsImZhbWlseV9uYW1lIjoiT2doZW5ldGVqaXJpIiwibG9jYWxlIjoiZW4tR0IiLCJpYXQiOjE3MDkwNTc2NjYsImV4cCI6MTcwOTA2MTI2NiwianRpIjoiZGQ0MGFjZGIwY2FmMDRiZjhiZTYxZjA5NzkyOTA5YWU3MGExYjljMCJ9.mSl0AHKCOXTnnejW9qDCw0WigAvhO3gMZ9h4PEo3pZIrlOcnYxdTjPCYQf_NywGWjxO7RCQrbqxbOMJlfIFoGSXT7F9frAQ_fSm94Bb9MAEE4HK6KZbxmDHiW1PnsQYMXvHM43pFgWcmJf2JvSnAginQqlL0A_7aZSsxnk9yOmA2JiD4OaoO997DqFeL2_kCy9m2rGE2KMJCNc6vwtpo4s1OHtb4c6zu6I5npA_X0oaN8AfqGzD-jsXbTP8MVKCXI2REvmYVlIoqXOdhXYsnHMx6x6siLz7OiYaJTezt2R9Tdw2vkxO83rraMPA18kZ4rdCJvTchOWevorLe155VWw
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /api/auth/initiate-forgot-password:
+    post:
+      tags:
+        - Auth
+      summary: initiate-forgot-password
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                email: a.tjfaith@gmail.com
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /api/auth/reset-password:
+    post:
+      tags:
+        - Auth
+      summary: reset-password
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                email: a.tjfaith@gmail.com
+                newPassword: Oghenetejiri123456#
+                confirmPassword: Oghenetejiri123456#
+                token: >-
+                  eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJjbHQ5dWZsMnAwMDAwbWs3d2l0Yzd0ZmhrIiwiZW1haWwiOiJhLnRqZmFpdGhAZ21haWwuY29tIiwiaWF0IjoxNzA5Mzk3ODEzLCJleHAiOjE3MDk0MDE0MTN9.hq7a27jL-kg3uTh8eNQ_tjWRK5MnywUHOagSJIQJhU0
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /api/auth/verify-email/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJjbHRnNDMwYXMwMDAwNzR0dHRpangxc2YzIiwiZW1haWwiOiJ0amJlbmJpekBnbWFpbC5jb20iLCJpYXQiOjE3MDk3NDg0NTIsImV4cCI6MTcwOTc1MjA1Mn0.FU254e_QrNvLa_sCMHXaiC2SEjG1rq8ossrUsh9IO-8:
+    get:
+      tags:
+        - Auth
+      summary: verify-email
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /api/auth/resend-activation-token:
+    post:
+      tags:
+        - Auth
+      summary: resend-activation-token
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                email: a.tjfaith@gmail.com
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /api/auth/update-password:
+    patch:
+      tags:
+        - Auth
+      summary: update-password
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                currentPassword: Oghenetejiri123456#
+                newPassword: Oghenetejiri123456#
+                confirmPassword: Oghenetejiri123456#
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /api/payment/initiate-payment:
+    post:
+      tags:
+        - Payment
+      summary: initiate-payment
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                email: a.tjfaith@gmail.com
+                amount: 100
+                propertyId: dddddd
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /api/payment/initiate-bank-transfer:
+    post:
+      tags:
+        - Payment
+      summary: initiate-bank-transfer
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                paymentRef:
+                  type: string
+                  example: 1234567890Raf
+                amount:
+                  type: number
+                  example: '1000.4'
+                payment_prof:
+                  type: string
+                  format: binary
+                property_id:
+                  type: string
+                  example: cltjxhoc40001mn1gu7wwd6zw
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /api/payment/verify-payment:
+    post:
+      tags:
+        - Payment
+      summary: verify-payment
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                paymentRef: lymlpl3vxv
+                amount: 100
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /api/payment/verify-bank-transfer:
+    patch:
+      tags:
+        - Payment
+      summary: verify-bank-transfer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                payment_id: cltjxmj7z000110u4uhadwxp7
+                property_id: cltjxhoc40001mn1gu7wwd6zw
+                payee_id: cltjusmx600001amklzseyl8i
+                paymentProfID: 65ec374c88c257da3386f0c4
+                amount: 1000.4
+                paymentRef: 1234567890Raf
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /api/property/get-all-property:
+    get:
+      tags:
+        - Property
+      summary: get-all-property
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: pageNumber
+          in: query
+          schema:
+            type: integer
+          example: '1'
+        - name: pageSize
+          in: query
+          schema:
+            type: integer
+          example: '1'
+        - name: propertyType
+          in: query
+          schema:
+            type: string
+          example: general
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /api/property/get-single-property/cltg4q4ag00019pklaf1a5i7a:
+    get:
+      tags:
+        - Property
+      summary: get-single-property
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /api/property/create-property:
+    post:
+      tags:
+        - Property
+      summary: create-property
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                  example: 3 Bed Room Flat
+                description:
+                  type: string
+                  example: This is a fully detached building
+                price:
+                  type: integer
+                  example: '30000'
+                images:
+                  type: string
+                  format: binary
+                property_type:
+                  type: string
+                  example: general
+                property_details:
+                  type: string
+                  example: '[]'
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /api/property/update-property:
+    patch:
+      tags:
+        - Property
+      summary: update-property
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                images_to_delete:
+                  type: string
+                  example: 65eaf12788c257da33526074
+                images:
+                  type: string
+                  format: binary
+                property_id:
+                  type: string
+                  example: cltijwz920001wcmru7ef3zhm
+                title:
+                  type: string
+                  example: House3
+                description:
+                  type: string
+                  example: new house
+                price:
+                  type: integer
+                  example: '400000'
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /api/property/delete-property/cltit7rtx00012b176mqbbb20:
+    delete:
+      tags:
+        - Property
+      summary: delete-property
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /api/admin/create-boot-admin:
+    post:
+      tags:
+        - Admin
+      summary: create-boot-admin
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                email: tjbenbiz@gmail.com
+                password: Oghenetejiri123456#
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /api/admin/create-user:
+    post:
+      tags:
+        - Admin
+      summary: create-user
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                email: faithakpeghughu@gmail.com
+                role: retailer
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /api/admin/update-user:
+    patch:
+      tags:
+        - Admin
+      summary: update-user
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                role: retailer
+                userId: eee
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /api/admin/admin-login:
+    post:
+      tags:
+        - Admin
+      summary: admin-login
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                email: tjbenbiz@gmail.com
+                password: Oghenetejiri123456#
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+

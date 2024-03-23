@@ -1,8 +1,12 @@
 import express from "express";
+import * as userController from "@/controllers/userController";
+import { validateUpdateUser } from "@/middleware/validators/usersValidator";
+import { authenticateUser } from "@/middleware/authMiddleware";
+
 const router = express.Router();
 
-const userController = require("../controllers/userController");
+router.patch("/update-data", authenticateUser, validateUpdateUser,  userController.updateUser);
+router.get("/user-data", authenticateUser,  userController.getUserData);
+router.get("/all",  userController.getAllUsers);
 
-router.get("/", userController.get_all_users);
-
-module.exports = router;
+export default router;

@@ -1,0 +1,138 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["driverAdapters"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Status {
+  active
+  pending
+  disabled
+}
+
+enum UserRole {
+  boot_admin
+  admin
+  retailer
+  user
+}
+
+enum PaymentStatus {
+  pending
+  success
+  failed
+}
+
+enum PaymentType {
+  bank_transfer
+  online
+}
+
+enum PropertyType {
+  general
+  land
+}
+
+enum ROIDuration {
+  annually
+}
+
+model User {
+  id                  String         @id @default(cuid())
+  email               String         @unique
+  password            String
+  first_name          String?
+  last_name           String?
+  phone_number        String?
+  gender              String?
+  marital_status      String?
+  date_of_birth       DateTime?
+  address             String?
+  city                String?
+  role                UserRole       @default(user)
+  state               String?
+  country             String?
+  status              Status         @default(pending)
+  nok_full_name       String?
+  nok_email           String?
+  nok_phone_number    String?
+  nok_relationship    String?
+  nok_address         String?
+  token               String?
+  refer_link          String?
+  referrals           Referrals[]    @relation("ReferringUser")
+  main_user_referrals Referrals[]    @relation("MainUser")
+  payments            Payment[]
+  properties_uploaded Property[]     @relation("RetailerProperty")
+  user_properties     UserProperty[] @relation("UserProperty")
+  created_at          DateTime       @default(now()) @map("created_at")
+  updated_at          DateTime       @updatedAt @map("updated_at")
+}
+
+model UserProperty {
+  id                String    @id @default(cuid())
+  roi               Float  
+  unit_price        Float
+  unit_bought       Float
+  total_amount_paid Float
+  estimated_roi     Float
+  property          Property? @relation(fields: [property_id], references: [id])
+  property_id       String?
+  user              User?     @relation("UserProperty", fields: [user_id], references: [id])
+  user_id           String?
+  payment           Payment?  @relation(fields: [paymemnt_id], references: [id])
+  paymemnt_id       String?   @unique
+}
+
+model Payment {
+  id                   String        @id @default(cuid())
+  authorization_url    String?
+  access_code          String?
+  amount               Float
+  reference            String        @unique
+  user_property_id      String? 
+  status               PaymentStatus @default(pending)
+  user                 User?         @relation(fields: [user_id], references: [id])
+  user_id              String
+  property             Property?     @relation(fields: [property_id], references: [id])
+  property_id          String
+  user_property        UserProperty? 
+  payment_full_details String?
+  payment_type         PaymentType
+  created_at           DateTime      @default(now()) @map("created_at")
+  updated_at           DateTime      @updatedAt @map("updated_at")
+}
+
+model Property {
+  id               String         @id @default(cuid())
+  title            String
+  description      String
+  price            Float
+  property_type    PropertyType   @default(general)
+  images           String
+  property_details String
+  user_properties  UserProperty[] 
+  retailer         User?          @relation("RetailerProperty", fields: [retailer_id], references: [id])
+  payments         Payment[]
+  user_property_id String?
+  retailer_id      String?
+  total_units      Int            @default(0)
+  roi              Float          @default(0)
+  roi_duration     ROIDuration    @default(annually)
+  created_at       DateTime       @default(now()) @map("created_at")
+  updated_at       DateTime       @updatedAt @map("updated_at")
+}
+
+model Referrals {
+  id                String   @id @default(cuid())
+  main_user         User?    @relation("MainUser", fields: [main_user_id], references: [id])
+  referring_user    User?    @relation("ReferringUser", fields: [referring_user_id], references: [id])
+  main_user_id      String?
+  referring_user_id String?
+  created_at        DateTime @default(now()) @map("created_at")
+  updated_at        DateTime @updatedAt @map("updated_at")
+}
