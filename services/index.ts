@@ -10,7 +10,7 @@ export {
 } from "@/services/email/emailTemplate";
 
 // user services
-export { updateUserService, getAllUsersService } from "@/services/userServices";
+export { updateUserService,userData, getAllUsersService } from "@/services/userServices";
 
 // payment services
 export {

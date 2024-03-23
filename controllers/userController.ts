@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import {updateUserService, getAllUsersService} from "@/services";
+import {updateUserService, userData, getAllUsersService} from "@/services";
 
 
 export const updateUser = async (req: Request, res: Response) => {
@@ -18,7 +18,14 @@ export const updateUser = async (req: Request, res: Response) => {
   }
 };
 
-
+export const getUserData = async (req: Request, res: Response) => {
+  try {
+    const users = await userData(req.auth?.userId); 
+    res.status(200).json(users);
+  } catch (error: unknown) { 
+    res.status(400).json({ error: (error as Error).message }); 
+  }
+};
 
 export const getAllUsers = async (req: Request, res: Response) => {
   try {

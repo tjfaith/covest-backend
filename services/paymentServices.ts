@@ -15,7 +15,7 @@ import {
 } from "@/services";
 
 export const initializePayment = async (payload: InitializePayment) => {
-  const { amount, email, userId, propertyId } = payload;
+  const { amount, email, userId, unitBought, estimatedRoi,  propertyId } = payload;
   try {
     const user = await prismaClient.user.findFirst({
       where: {
@@ -81,6 +81,20 @@ export const initializePayment = async (payload: InitializePayment) => {
         data: response.data.data,
       };
     }
+
+    // Add property to user property
+    await prismaClient.userProperty.create({
+      data: {
+        property_id: propertyId,
+        user_id: userId,
+        roi:property.roi,
+        unit_price:property.price,
+        unit_bought:unitBought,
+        estimated_roi:estimatedRoi,
+        total_amount_paid:amount * 100
+      },
+    });
+
     return {
       status: 201,
       message: "Payment Initialized successfully!",
@@ -146,6 +160,10 @@ export const verifyPaymentService = async (paymentData: VerifyPayment) => {
         payment_full_details: JSON.stringify(response.data),
       },
     });
+
+
+
+
     return {
       status: 201,
       message: "Payment verified successfully!",
@@ -159,6 +177,7 @@ export const verifyPaymentService = async (paymentData: VerifyPayment) => {
   }
 };
 
+// BANK TRANSFER
 export const initiateBankTransfer = async (
   transferDetails: InitializeBankTransfer
 ) => {

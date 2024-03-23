@@ -18,7 +18,7 @@ export const newProperty = async (propertyData: CreatePropertyInstance) => {
       ...propertyData,
       price: parseFloat(propertyData.price),
       images: JSON.stringify(images),
-      property_details: JSON.stringify(propertyData.property_details),
+      property_details:typeof propertyData.property_details === 'string' ? propertyData.property_details : JSON.stringify(propertyData.property_details)
     };
 
     const property = await prismaClient.property.create({
@@ -212,6 +212,14 @@ export const deleteSingleProperty = async (payload: Record<string, string>) => {
       return {status:401, message:'You are not authorized to delete this property, contact admin'}
     }
 
+    const paymentsCount = await prismaClient.payment.count({
+      where: {
+        property_id: property.id,
+      },
+    });
+
+
+
 
     let property_images = JSON.parse(property.images)
     if(property_images.length>0){
@@ -219,6 +227,16 @@ export const deleteSingleProperty = async (payload: Record<string, string>) => {
          await deleteImage(image.fileId);
       }
     }
+
+  if (paymentsCount > 0) {
+    
+    await prismaClient.payment.deleteMany({
+      where: {
+        property_id: property.id,
+      },
+    });
+  }
+
 
     const deletedProperty = await prismaClient.property.delete({
       where:{
@@ -231,6 +249,7 @@ export const deleteSingleProperty = async (payload: Record<string, string>) => {
       data: deletedProperty
     }
   } catch (error) {
+    console.log(error, 'error...')
     return {
       status: 500,
       message: 'Internal Server Error',

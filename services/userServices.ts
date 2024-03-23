@@ -19,6 +19,19 @@ export const updateUserService = async(userData:UserInstance, userId:string)=>{
 }
 
 
+export const userData = async (userId:string) => {
+  try {
+    return await prismaClient.user.findUnique({
+      where:{
+        id:userId
+      },
+    });
+    
+  } catch (error) {
+    throw new Error('Failed to fetch users');
+  }
+};
+
 export const getAllUsersService = async () => {
   try {
     return await prismaClient.user.findMany();

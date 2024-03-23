@@ -12,6 +12,7 @@ dotenv.config();
 const app = express();
 const allowedOrigins = [
   "http://localhost:3000",
+  "http://192.168.135.18:3000"
 ];
 const corsOptions = {
   origin: (origin:any, callback:any) => {

@@ -14,7 +14,10 @@ const CreatePropertySchema = Joi.object({
   images: Joi.array().required(),
   property_type:  PropertyType.required(),
   // property_details: Joi.array().items(propertyDetailSchema).required()
-  property_details: Joi.string().required()
+  property_details: Joi.string().required(),
+  total_units: Joi.number().required(),
+  roi: Joi.number().required(),
+  roi_duration:Joi.string()
  });
  
  export const validateCreateProperty = (
@@ -38,8 +41,11 @@ const UpdatePropertySchema = Joi.object({
   images: Joi.array(),
   images_to_delete:Joi.array(),
   property_type:  PropertyType,
-  property_details: Joi.string()
-}).or('title', 'last_name', 'description', 'images', 'images_to_delete', 'property_type', 'property_details')
+  property_details: Joi.string(),
+  total_units: Joi.number(),
+  roi: Joi.number(),
+  roi_duration:Joi.string()
+}).or('title', 'last_name', 'description', 'images', 'images_to_delete', 'property_type', 'property_details','total_units','roi', 'roi_duration')
 .messages({
   'object.missing': 'At least one field is required'
 });;

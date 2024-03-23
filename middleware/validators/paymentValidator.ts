@@ -5,6 +5,8 @@ import { Request, Response, NextFunction } from "express";
 const InitPaymentSchema = Joi.object({
   email: Joi.string().email().required(),
   amount: Joi.number().required(),
+  unitBought: Joi.number().required(),
+  estimatedRoi: Joi.number().required(),
   propertyId: Joi.string().required()
 });
 

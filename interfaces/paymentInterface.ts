@@ -2,6 +2,8 @@ export interface InitializePayment {
   amount: number;
   email: string;
   userId: string;
+  unitBought: number;
+  estimatedRoi:number;
   propertyId: string;
 }
 

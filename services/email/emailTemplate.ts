@@ -11,7 +11,7 @@ export const confirmForgotPasswordEmail = (payload: Record<string, string>) => {
             <h2 style="margin: 0 0 10px; color: #333;">Hello!</h2>
             <p style="margin: 0; color: #555;">You requested to reset your password.</p>
         </div>
-        <a href="${process.env.FRONTEND_LINK}/verifyEmail/${payload.token}" style="cursor: pointer"><button style="background-color: green; color: white; border: none; border-radius: 5px; padding: 10px 20px; font-size: 16px; cursor: pointer;">Reset Password</button></a>
+        <a href="${process.env.FRONTEND_LINK}/forgottenPassword/${payload.token}" style="cursor: pointer"><button style="background-color: green; color: white; border: none; border-radius: 5px; padding: 10px 20px; font-size: 16px; cursor: pointer;">Reset Password</button></a>
         <div style="margin-top: 20px; color: #777;">
             PS: If you did not initiate this request, reply to this email or write to <a href="mailto:help@coovestafrica.com" style="color: #777; text-decoration: none;">help@coovestafrica.com</a> so we can look into a possible attempt to breach your account.
         </div>
