@@ -60,7 +60,7 @@ export const initializePayment = async (payload: InitializePayment) => {
         payment_type: "online",
         access_code: response.data.data.access_code,
         reference: response.data.data.reference,
-        amount: amount * 100,
+        amount: amount,
         user_id: userId,
         status: "pending",
         property_id: propertyId,
@@ -125,6 +125,7 @@ export const verifyPaymentService = async (paymentData: VerifyPayment) => {
       return {
         status: 200,
         message: `Payment with reference ID: ${paymentData.paymentRef} has already been verified successfully `,
+        data:existingPayment.payment_full_details &&  JSON.parse(existingPayment.payment_full_details)
       };
     }
 
@@ -135,44 +136,44 @@ export const verifyPaymentService = async (paymentData: VerifyPayment) => {
       };
     }
 
-    if (existingPayment.amount !== paymentData.amount * 100) {
-      return {
-        status: 400,
-        message: `Payment with reference ID: ${paymentData.paymentRef} can't be verified, check the payment details `,
-      };
-    }
+    // if (existingPayment.amount !== paymentData.amount * 100) {
+    //   return {
+    //     status: 400,
+    //     message: `Payment with reference ID: ${paymentData.paymentRef} can't be verified, check the payment details `,
+    //   };
+    // }
 
     const response = await verifyPaystack(paymentData.paymentRef);
 
-    if (response.data.status !== "success") {
+    
+    if (response.gateway_response !== "Successful") {
       return {
         status: 400,
-        message: response.data.message,
-        data: response.data,
+        message: response.message,
+        data: response,
       };
     }
 
-    await prismaClient.payment.update({
+   await prismaClient.payment.update({
       where: { id: existingPayment.id },
       data: {
         status: "success",
-        updated_at: response.data.created_at,
-        payment_full_details: JSON.stringify(response.data),
+        updated_at: response.created_at,
+        payment_full_details: JSON.stringify(response),
       },
     });
-
 
 
 
     return {
       status: 201,
       message: "Payment verified successfully!",
-      data: response.data,
+      data: response,
     };
   } catch (error) {
     return {
       status: 500,
-      message: error,
+      message: 'internal server error..',
     };
   }
 };
