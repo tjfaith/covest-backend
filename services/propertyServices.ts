@@ -173,6 +173,7 @@ export const updateRetailerProperty = async(propertyData:UpdatePropertyInstance)
     where: { id: property_id },
     data: {
       ...updateData,
+      total_units: Number(updateData.total_units) || property.total_units,
       price: typeof price === 'string' ? parseFloat(price) : price,
       property_details: typeof property_details === 'string' ? property_details : JSON.stringify(property_details),
     },
@@ -185,6 +186,7 @@ export const updateRetailerProperty = async(propertyData:UpdatePropertyInstance)
     data:{updatedProperty, file_responses}
   }
   }catch(error){
+    console.log(error)
     return{
       status:500,
       message:"Internal Server Error",

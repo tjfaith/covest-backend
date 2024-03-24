@@ -121,6 +121,7 @@ model Property {
   user_property_id String?
   retailer_id      String?
   total_units      Int            @default(0)
+  total_units_sold Int            @default(0)
   roi              Float          @default(0)
   roi_duration     ROIDuration    @default(annually)
   created_at       DateTime       @default(now()) @map("created_at")

@@ -21,7 +21,8 @@ export interface UpdatePropertyInstance{
   property_type?:PropertyType;
   property_details?:Record<string, Record<string, string | number | boolean>>[];
   retailer_id?:string;
-  files?:any
+  files?:any;
+  total_units?:number
 }
 
 

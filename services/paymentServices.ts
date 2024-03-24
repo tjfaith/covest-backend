@@ -15,7 +15,8 @@ import {
 } from "@/services";
 
 export const initializePayment = async (payload: InitializePayment) => {
-  const { amount, email, userId, unitBought, estimatedRoi,  propertyId } = payload;
+  const { amount, email, userId, unitBought, estimatedRoi, propertyId } =
+    payload;
   try {
     const user = await prismaClient.user.findFirst({
       where: {
@@ -40,6 +41,22 @@ export const initializePayment = async (payload: InitializePayment) => {
       return {
         status: 404,
         message: "Selected property not found",
+        data: {},
+      };
+    }
+
+    if (property.total_units_sold >= property.total_units) {
+      return {
+        status: 403,
+        message: "Selected property is sold out",
+        data: {},
+      };
+    }
+
+    if (unitBought+property.total_units_sold > property.total_units) {
+      return {
+        status: 403,
+        message: "Property Unit exceeded",
         data: {},
       };
     }
@@ -87,11 +104,19 @@ export const initializePayment = async (payload: InitializePayment) => {
       data: {
         property_id: propertyId,
         user_id: userId,
-        roi:property.roi,
-        unit_price:property.price,
-        unit_bought:unitBought,
-        estimated_roi:estimatedRoi,
-        total_amount_paid:amount * 100
+        roi: property.roi,
+        unit_price: property.price,
+        unit_bought: unitBought,
+        estimated_roi: estimatedRoi,
+        total_amount_paid: amount * 100,
+      },
+    });
+
+    // Update property
+    await prismaClient.property.update({
+      where: { id: property.id },
+      data: {
+        total_units_sold: property.total_units_sold + unitBought,
       },
     });
 
@@ -125,7 +150,9 @@ export const verifyPaymentService = async (paymentData: VerifyPayment) => {
       return {
         status: 200,
         message: `Payment with reference ID: ${paymentData.paymentRef} has already been verified successfully `,
-        data:existingPayment.payment_full_details &&  JSON.parse(existingPayment.payment_full_details)
+        data:
+          existingPayment.payment_full_details &&
+          JSON.parse(existingPayment.payment_full_details),
       };
     }
 
@@ -145,7 +172,6 @@ export const verifyPaymentService = async (paymentData: VerifyPayment) => {
 
     const response = await verifyPaystack(paymentData.paymentRef);
 
-    
     if (response.gateway_response !== "Successful") {
       return {
         status: 400,
@@ -154,7 +180,7 @@ export const verifyPaymentService = async (paymentData: VerifyPayment) => {
       };
     }
 
-   await prismaClient.payment.update({
+    await prismaClient.payment.update({
       where: { id: existingPayment.id },
       data: {
         status: "success",
@@ -162,8 +188,6 @@ export const verifyPaymentService = async (paymentData: VerifyPayment) => {
         payment_full_details: JSON.stringify(response),
       },
     });
-
-
 
     return {
       status: 201,
@@ -173,7 +197,7 @@ export const verifyPaymentService = async (paymentData: VerifyPayment) => {
   } catch (error) {
     return {
       status: 500,
-      message: 'internal server error..',
+      message: "internal server error..",
     };
   }
 };
