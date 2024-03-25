@@ -8,7 +8,9 @@ export interface CreatePropertyInstance {
   property_type:PropertyType;
   property_details:Record<string, Record<string, string | number | boolean>>[];
   retailer_id:string;
-  files:any
+  files:any,
+  total_units:number,
+  roi:number,
 }
 
 export interface UpdatePropertyInstance{
@@ -22,7 +24,8 @@ export interface UpdatePropertyInstance{
   property_details?:Record<string, Record<string, string | number | boolean>>[];
   retailer_id?:string;
   files?:any;
-  total_units?:number
+  total_units?:number,
+  roi:number,
 }
 
 

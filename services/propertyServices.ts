@@ -16,6 +16,8 @@ export const newProperty = async (propertyData: CreatePropertyInstance) => {
     delete propertyData.files;
     const propertyPayload = {
       ...propertyData,
+      total_units:  Number(propertyData.total_units),
+      roi: Number(propertyData.roi),
       price: parseFloat(propertyData.price),
       images: JSON.stringify(images),
       property_details:typeof propertyData.property_details === 'string' ? propertyData.property_details : JSON.stringify(propertyData.property_details)
@@ -174,6 +176,7 @@ export const updateRetailerProperty = async(propertyData:UpdatePropertyInstance)
     data: {
       ...updateData,
       total_units: Number(updateData.total_units) || property.total_units,
+      roi:Number(updateData.roi) || property.roi,
       price: typeof price === 'string' ? parseFloat(price) : price,
       property_details: typeof property_details === 'string' ? property_details : JSON.stringify(property_details),
     },
