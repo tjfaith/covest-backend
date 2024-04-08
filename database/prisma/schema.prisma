@@ -94,7 +94,7 @@ model Payment {
   access_code          String?
   amount               Float
   reference            String        @unique
-  user_property_id      String? 
+  user_property_id     String? 
   status               PaymentStatus @default(pending)
   user                 User?         @relation(fields: [user_id], references: [id])
   user_id              String

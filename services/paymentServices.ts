@@ -112,6 +112,7 @@ export const initializePayment = async (payload: InitializePayment) => {
       },
     });
 
+    console.log(property.id,  'PROPERTY ID...')
     // Update property
     await prismaClient.property.update({
       where: { id: property.id },
