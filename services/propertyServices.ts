@@ -189,7 +189,6 @@ export const updateRetailerProperty = async(propertyData:UpdatePropertyInstance)
     data:{updatedProperty, file_responses}
   }
   }catch(error){
-    console.log(error)
     return{
       status:500,
       message:"Internal Server Error",
@@ -254,7 +253,6 @@ export const deleteSingleProperty = async (payload: Record<string, string>) => {
       data: deletedProperty
     }
   } catch (error) {
-    console.log(error, 'error...')
     return {
       status: 500,
       message: 'Internal Server Error',

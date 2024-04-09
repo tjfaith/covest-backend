@@ -91,39 +91,34 @@ export const initializePayment = async (payload: InitializePayment) => {
     if (response.data.status === "error") {
       return { status: 400, message: response.data.message };
     }
-    if (response.data.status === true) {
+ 
+    
+    if (response.data.status === true ) {
+      // Add property to user property
+       const userProperty = await prismaClient.userProperty.create({
+        data: {
+          property_id: propertyId,
+          user_id: userId,
+          roi: property.roi,
+          unit_price: property.price,
+          unit_bought: unitBought,
+          estimated_roi: estimatedRoi,
+          total_amount_paid: amount * 100,
+          payment_id:newPayment.id
+        },
+      });
+  
+  
       return {
         status: 201,
         message: response.data.message,
         data: response.data.data,
+        userProperty
       };
     }
-
-    // Add property to user property
-    await prismaClient.userProperty.create({
-      data: {
-        property_id: propertyId,
-        user_id: userId,
-        roi: property.roi,
-        unit_price: property.price,
-        unit_bought: unitBought,
-        estimated_roi: estimatedRoi,
-        total_amount_paid: amount * 100,
-      },
-    });
-
-    console.log(property.id,  'PROPERTY ID...')
-    // Update property
-    await prismaClient.property.update({
-      where: { id: property.id },
-      data: {
-        total_units_sold: property.total_units_sold + unitBought,
-      },
-    });
-
     return {
-      status: 201,
-      message: "Payment Initialized successfully!",
+      status: 400,
+      message: "Payment not initialized",
       data: response.data.data,
     };
   } catch (error) {
@@ -189,6 +184,21 @@ export const verifyPaymentService = async (paymentData: VerifyPayment) => {
         payment_full_details: JSON.stringify(response),
       },
     });
+
+    const userProperty = await prismaClient.userProperty.findUnique({
+      where: { payment_id: existingPayment.id },
+    });
+
+      // Update property
+      await prismaClient.property.update({
+        where: { id: existingPayment.property_id },
+        data: {
+          total_units_sold: {
+            increment: userProperty?.unit_bought || 0,
+          },
+        },
+      });
+      
 
     return {
       status: 201,

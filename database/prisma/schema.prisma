@@ -84,8 +84,8 @@ model UserProperty {
   property_id       String?
   user              User?     @relation("UserProperty", fields: [user_id], references: [id])
   user_id           String?
-  payment           Payment?  @relation(fields: [paymemnt_id], references: [id])
-  paymemnt_id       String?   @unique
+  payment           Payment?  @relation(fields: [payment_id], references: [id])
+  payment_id       String?   @unique
 }
 
 model Payment {
