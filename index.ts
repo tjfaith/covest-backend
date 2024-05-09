@@ -13,7 +13,9 @@ const app = express();
 const allowedOrigins = [
   "http://localhost:3000",
   "http://192.168.135.18:3000",
-  "https://covestng.netlify.app"
+  "https://covestng.netlify.app",
+  "http://localhost:7000",
+  "https://covest-backend-2ksjndcdja-uc.a.run.app"
 ];
 const corsOptions = {
   origin: (origin:any, callback:any) => {
@@ -21,6 +23,7 @@ const corsOptions = {
       // Allow requests with no origin or from allowed origins
       callback(null, true);
     } else {
+      console.log(origin, 'origin')
       callback(new Error("Not allowed by CORS"));
     }
   },
@@ -63,6 +66,13 @@ app.use("/api/payment", paymentRoutes);
 const swaggerDocument = YAML.load(path.join(__dirname, 'swagger.yaml'));
 
 // Serve Swagger UI at the base route
-app.use('/', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+// app.use('/', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+
+app.use('/', (req: any, res: { setHeader: (arg0: string, arg1: string) => void; }, next: () => void) => {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+  res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
+  next();
+}, swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 
