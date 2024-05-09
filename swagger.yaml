@@ -552,6 +552,12 @@ paths:
                 title:
                   type: string
                   example: 3 Bed Room Flat
+                total_units:
+                  type: number
+                  example: 200
+                roi:
+                  type: number
+                  example: 25
       responses:
         '200':
           description: ''
