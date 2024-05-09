@@ -38,12 +38,12 @@ paths:
       summary: update-data
       description: update-data
       operationId: updateData
-      parameters:
-        - name: ''
-          in: header
-          schema:
-            type: string
-            example: ''
+      # parameters:
+      #   - name: ''
+      #     in: header
+      #     schema:
+      #       type: string
+      #       example: ''
       requestBody:
         content:
           application/json:
@@ -264,19 +264,20 @@ paths:
       responses:
         '200':
           description: ''
-  /api/auth/verify-email/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJjbHRnNDMwYXMwMDAwNzR0dHRpangxc2YzIiwiZW1haWwiOiJ0amJlbmJpekBnbWFpbC5jb20iLCJpYXQiOjE3MDk3NDg0NTIsImV4cCI6MTcwOTc1MjA1Mn0.FU254e_QrNvLa_sCMHXaiC2SEjG1rq8ossrUsh9IO-8:
+  /api/auth/verify-email/{token}:
     get:
       tags:
         - Auth
       summary: verify-email
       description: verify-email
       operationId: verifyEmail
-      # requestBody:
-      #   content:
-      #     application/json:
-      #       examples:
-      #         verify-email:
-      #           value: ''
+      parameters:
+        - in: path
+          name: token
+          description: The verification token.
+          required: true
+          schema:
+            type: string
       responses:
         '200':
           description: ''
@@ -501,13 +502,20 @@ paths:
           description: ''
       security:
         - bearerAuth: []
-  /api/property/get-single-property/cltg4q4ag00019pklaf1a5i7a:
+  /api/property/get-single-property/{property_id}:
     get:
       tags:
         - Property
       summary: get-single-property
       description: get-single-property
       operationId: getSingleProperty
+      parameters:
+        - in: path
+          name: property_id
+          description: Property Id.
+          required: true
+          schema:
+            type: string
       responses:
         '200':
           description: ''
@@ -585,13 +593,20 @@ paths:
           description: ''
       security:
         - bearerAuth: []
-  /api/property/delete-property/cltit7rtx00012b176mqbbb20:
+  /api/property/delete-property/{property_id}:
     delete:
       tags:
         - Property
       summary: delete-property
       description: delete-property
       operationId: deleteProperty
+      parameters:
+        - in: path
+          name: property_id
+          description: Property Id.
+          required: true
+          schema:
+            type: string
       responses:
         '200':
           description: ''
