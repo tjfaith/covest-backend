@@ -96,19 +96,78 @@ export const login = async (userData: LoginUserInput) => {
   }
 };
 
+// export const googleLogin = async (googleAuthDetails: GoogleLoginDetails) => {
+//   const googleClientId = process.env.GOOGLE_LOGIN_CLIENT_ID;
+//   console.log(googleClientId,'client id')
+//   const client = new OAuth2Client(googleClientId);
+
+//   const { idToken } = googleAuthDetails;
+
+//   try {
+//     const ticket = await client.verifyIdToken({
+//       idToken,
+//       audience: googleClientId,
+//     });
+
+//     const payload = ticket.getPayload();
+//     console.log(payload, 'payload')
+
+//     const user = await prismaClient.user.findUnique({
+//       where: { email: payload?.email?.toLowerCase() },
+//     });
+
+//     if (!user) {
+//       const user_payload:GoogleSignupInstance = {
+//         email: payload?.email?.toLowerCase() as string,
+//         first_name: payload?.given_name,
+//         last_name: payload?.family_name,
+//         // avatar: payload?.picture,
+//         status: payload?.email_verified ? Status.active : Status.pending,
+//         password:await bcrypt.hash("SOCIAL_LOGIN", 10),
+//       };
+
+
+//       const newUser = await prismaClient.user.create({
+//         data: user_payload,
+//       });
+
+//       if(user_payload.status==='active'){
+//         await login({email:user_payload.email, password:user_payload.password})
+//       }
+//       return {
+//         status: 201,
+//         message: "User created successfully",
+//         user: newUser,
+//       };
+//     }
+
+//     if (user.status === "pending") {
+//       return { status: 401, message: "Please verify your email" };
+//     }
+
+//     const token = generateJwtToken({userId:user.id, email:user.email})
+//     await prismaClient.user.update({
+//       where: { id: user.id },
+//       data: { token },
+//     });
+//     return { status: 200, message: "Sign in successful", data: token };
+//   } catch (error) {
+//     console.log(error, 'error')
+//     return { status: 500, error: "Failed to authenticate with Google" };
+//   }
+// };
+
+
 export const googleLogin = async (googleAuthDetails: GoogleLoginDetails) => {
-  const googleClientId = process.env.CLIENT_ID;
-  const client = new OAuth2Client(googleClientId);
+    try {
+  const client = new OAuth2Client(process.env.GOOGLE_LOGIN_CLIENT_ID);
+  const ticket = await client.verifyIdToken({
+    idToken: googleAuthDetails.idToken,
+    audience: process.env.GOOGLE_LOGIN_CLIENT_ID,
+  });
 
-  const { idToken } = googleAuthDetails;
+  const payload = ticket.getPayload();
 
-  try {
-    const ticket = await client.verifyIdToken({
-      idToken,
-      audience: googleClientId,
-    });
-
-    const payload = ticket.getPayload();
 
     const user = await prismaClient.user.findUnique({
       where: { email: payload?.email?.toLowerCase() },
@@ -119,7 +178,7 @@ export const googleLogin = async (googleAuthDetails: GoogleLoginDetails) => {
         email: payload?.email?.toLowerCase() as string,
         first_name: payload?.given_name,
         last_name: payload?.family_name,
-        avatar: payload?.picture,
+        // avatar: payload?.picture,
         status: payload?.email_verified ? Status.active : Status.pending,
         password:await bcrypt.hash("SOCIAL_LOGIN", 10),
       };
@@ -152,6 +211,7 @@ export const googleLogin = async (googleAuthDetails: GoogleLoginDetails) => {
   } catch (error) {
     return { status: 500, error: "Failed to authenticate with Google" };
   }
+
 };
 
 export const initiateForgotPassword = async (
