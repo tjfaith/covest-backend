@@ -1,0 +1,48 @@
+enum Status {
+  ACTIVE
+  PENDING
+  DISABLED
+}
+
+enum TransactionStatus {
+  COMPLETED
+  PENDING
+  FAILED
+}
+
+enum UserRole {
+  ADMIN
+  USER
+  SUPER_ADMIN
+}
+
+enum CardType {
+  PHYSICAL
+  VIRTUAL
+}
+
+enum CardStatus {
+  ACTIVE
+  PENDING
+  EXPIRED
+}
+
+enum LoanStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  DISBURSED
+  CLOSED
+}
+
+enum PaymentLinkStatus {
+  PENDING
+  PAID
+  EXPIRED
+  CANCELLED
+}
+
+enum CurrencyType {
+  FIAT
+  CRYPTO
+}

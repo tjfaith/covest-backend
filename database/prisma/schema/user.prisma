@@ -1,0 +1,26 @@
+// User schema
+model User {
+  id            String        @id @default(cuid())
+  email         String        @unique
+  password      String
+  full_name     String
+  phone_number  String?
+  gender        String?
+  date_of_birth DateTime?
+  address       String?
+  city          String?
+  role          UserRole      @default(USER)
+  state         String?
+  country       String?
+  status        Status        @default(PENDING)
+  token         String?
+  transactions  Transaction[]
+  cards         Card[]
+  loans         Loan[]
+  payment_links PaymentLink[]
+  locked_funds  LockedFunds[]
+  created_at    DateTime      @default(now()) @map("created_at")
+  updated_at    DateTime      @updatedAt @map("updated_at")
+
+  @@map("users")
+}

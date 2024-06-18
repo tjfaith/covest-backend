@@ -1,0 +1,18 @@
+model LockedFunds {
+  id            String       @id @default(cuid())
+  maturity_date DateTime
+  amount        Float
+  currency_type CurrencyType
+  currency_id   String
+  interest_rate Float
+  gain_interest Float
+  total_gains   Float
+  created_at    DateTime     @default(now())
+  updated_at    DateTime     @updatedAt
+  user_id       String
+
+  currency Currency @relation(fields: [currency_id], references: [id])
+  user     User     @relation(fields: [user_id], references: [id])
+
+  @@map("locked_funds")
+}

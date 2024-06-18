@@ -1,0 +1,18 @@
+model Transaction {
+  id                   String            @id @default(cuid())
+  receipt_no           Int?              @unique
+  recepiant_name       String
+  amount               Float
+  sender_currency_id   String
+  receiver_currency_id String
+  status               TransactionStatus @default(PENDING)
+  sender_details       User?             @relation(fields: [sender_id], references: [id])
+  sender_id            String
+  created_at           DateTime          @default(now()) @map("created_at")
+  updated_at           DateTime          @updatedAt @map("updated_at")
+
+  sender_currency   Currency @relation("SenderCurrency", fields: [sender_currency_id], references: [id])
+  receiver_currency Currency @relation("ReceiverCurrency", fields: [receiver_currency_id], references: [id])
+
+  @@map("transactions")
+}

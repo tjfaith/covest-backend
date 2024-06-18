@@ -3,7 +3,6 @@ import {updateUserService, userData, getAllUsersService} from "@/services";
 
 
 export const updateUser = async (req: Request, res: Response) => {
-
   try {
     const response = await updateUserService(req.body, req.auth?.userId);
     res.status(response.status).json(response);

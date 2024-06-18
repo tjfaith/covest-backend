@@ -1,0 +1,16 @@
+model Currency {
+  id              String @id @default(cuid())
+  name            String
+  rate            Float?
+  avatar          String
+  currency_symbol String
+
+  sender_transactions   Transaction[] @relation("SenderCurrency")
+  receiver_transactions Transaction[] @relation("ReceiverCurrency")
+  loans                 Loan[]        @relation("LoanCurrency")
+  collaterals           Loan[]        @relation("CollateralCurrency")
+  payment_links         PaymentLink[]
+  locked_funds          LockedFunds[]
+
+  @@map("currencies")
+}

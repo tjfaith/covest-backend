@@ -1,0 +1,14 @@
+model Card {
+  id          String     @id @default(cuid())
+  card_type   CardType
+  status      CardStatus
+  holder_name String
+  card_number BigInt
+  expire_date String
+  cvc         Int
+  user_id     String
+
+  user User @relation(fields: [user_id], references: [id])
+
+  @@map("cards")
+}

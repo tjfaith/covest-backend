@@ -1,0 +1,32 @@
+model PaymentLink {
+  id           String            @id @default(cuid())
+  date         DateTime
+  amount       Float
+  currency_id  String
+  address      String
+  status       PaymentLinkStatus
+  created_at   DateTime          @default(now())
+  expire_date  DateTime
+  reference_no Int               @unique
+  user_id      String
+
+  currency  Currency              @relation(fields: [currency_id], references: [id])
+  timelines PaymentLinkTimeline[]
+  user      User                  @relation(fields: [user_id], references: [id])
+
+  @@map("payment_links")
+}
+
+model PaymentLinkTimeline {
+  id              String   @id @default(cuid())
+  activity        String
+  timestamp       DateTime
+  description     String
+  stage           Int
+  status          Boolean
+  payment_link_id String
+
+  payment_link PaymentLink @relation(fields: [payment_link_id], references: [id])
+
+  @@map("payment_link_timelines")
+}

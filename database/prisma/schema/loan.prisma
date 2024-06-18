@@ -1,0 +1,36 @@
+model Loan {
+  id               String     @id @default(cuid())
+  request_date     DateTime
+  due_date         DateTime
+  amount           Float
+  loan_currency_id String
+  collateral_id    String
+  status           LoanStatus
+  created_at       DateTime   @default(now()) @map("created_at")
+  updated_at       DateTime   @updatedAt @map("updated_at")
+  reference_no     Int        @unique
+  interest_rate    Float
+  penalty_fee      Float
+  user_id          String
+
+  loan_currency Currency       @relation("LoanCurrency", fields: [loan_currency_id], references: [id])
+  collateral    Currency       @relation("CollateralCurrency", fields: [collateral_id], references: [id])
+  timelines     LoanTimeline[]
+  user          User           @relation(fields: [user_id], references: [id])
+
+  @@map("loans")
+}
+
+model LoanTimeline {
+  id          String   @id @default(cuid())
+  activity    String
+  timestamp   DateTime
+  description String
+  stage       Int
+  status      Boolean
+  loan_id     String
+
+  loan Loan @relation(fields: [loan_id], references: [id])
+
+  @@map("loan_timelines")
+}

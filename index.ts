@@ -12,10 +12,7 @@ dotenv.config();
 const app = express();
 const allowedOrigins = [
   "http://localhost:3000",
-  "http://192.168.135.18:3000",
-  "https://covestng.netlify.app",
-  "http://localhost:7000",
-  "https://covest-backend-2ksjndcdja-uc.a.run.app"
+  "https://mybackbone.io",
 ];
 const corsOptions = {
   origin: (origin:any, callback:any) => {
@@ -50,17 +47,13 @@ app
   });
 
 // routes
-import adminRoutes from "@/routes/adminRoutes";
-import propertyRoutes from "@/routes/propertyRoutes";
+
 import authRoutes from "@/routes/authRoutes";
 import userRoutes from "@/routes/userRoutes";
-import paymentRoutes from "@/routes/paymentRoutes";
 
-app.use("/api/admin", adminRoutes);
-app.use("/api/property", propertyRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/auth", authRoutes);
-app.use("/api/payment", paymentRoutes);
+
 
 // Load the Swagger YAML file
 const swaggerDocument = YAML.load(path.join(__dirname, 'swagger.yaml'));
