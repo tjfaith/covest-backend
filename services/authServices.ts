@@ -12,6 +12,7 @@ import {
   confirmForgotPasswordEmail,
   verifyJWT,
 } from "@/services";
+
 import {
   GoogleLoginDetails,
   GoogleSignupInstance,
@@ -20,13 +21,14 @@ import {
 
 export const signUp = async (userData: CreateUserInput) => {
   try {
-    const { email, password } = userData;
+    const { email, full_name,  password } = userData;
     const hashedPassword = await bcrypt.hash(password, 10);
     const newUser = await prismaClient.user.create({
       data: {
         email: email,
+        full_name: full_name,
         password: hashedPassword,
-        status: "pending",
+        status: "PENDING",
       },
     });
     const token = generateJwtToken({ userId: newUser.id, email })
@@ -79,7 +81,7 @@ export const login = async (userData: LoginUserInput) => {
       return { status: 401, message: "Invalid credentials" };
     }
 
-    if (user.status === "pending") {
+    if (user.status === "PENDING") {
       return { status: 403, message: "Account is pending approval." };
     }
 
@@ -95,67 +97,6 @@ export const login = async (userData: LoginUserInput) => {
     return { status: 500, message: "Internal server error" };
   }
 };
-
-// export const googleLogin = async (googleAuthDetails: GoogleLoginDetails) => {
-//   const googleClientId = process.env.GOOGLE_LOGIN_CLIENT_ID;
-//   console.log(googleClientId,'client id')
-//   const client = new OAuth2Client(googleClientId);
-
-//   const { idToken } = googleAuthDetails;
-
-//   try {
-//     const ticket = await client.verifyIdToken({
-//       idToken,
-//       audience: googleClientId,
-//     });
-
-//     const payload = ticket.getPayload();
-//     console.log(payload, 'payload')
-
-//     const user = await prismaClient.user.findUnique({
-//       where: { email: payload?.email?.toLowerCase() },
-//     });
-
-//     if (!user) {
-//       const user_payload:GoogleSignupInstance = {
-//         email: payload?.email?.toLowerCase() as string,
-//         first_name: payload?.given_name,
-//         last_name: payload?.family_name,
-//         // avatar: payload?.picture,
-//         status: payload?.email_verified ? Status.active : Status.pending,
-//         password:await bcrypt.hash("SOCIAL_LOGIN", 10),
-//       };
-
-
-//       const newUser = await prismaClient.user.create({
-//         data: user_payload,
-//       });
-
-//       if(user_payload.status==='active'){
-//         await login({email:user_payload.email, password:user_payload.password})
-//       }
-//       return {
-//         status: 201,
-//         message: "User created successfully",
-//         user: newUser,
-//       };
-//     }
-
-//     if (user.status === "pending") {
-//       return { status: 401, message: "Please verify your email" };
-//     }
-
-//     const token = generateJwtToken({userId:user.id, email:user.email})
-//     await prismaClient.user.update({
-//       where: { id: user.id },
-//       data: { token },
-//     });
-//     return { status: 200, message: "Sign in successful", data: token };
-//   } catch (error) {
-//     console.log(error, 'error')
-//     return { status: 500, error: "Failed to authenticate with Google" };
-//   }
-// };
 
 
 export const googleLogin = async (googleAuthDetails: GoogleLoginDetails) => {
@@ -176,10 +117,9 @@ export const googleLogin = async (googleAuthDetails: GoogleLoginDetails) => {
     if (!user) {
       const user_payload:GoogleSignupInstance = {
         email: payload?.email?.toLowerCase() as string,
-        first_name: payload?.given_name,
-        last_name: payload?.family_name,
-        // avatar: payload?.picture,
-        status: payload?.email_verified ? Status.active : Status.pending,
+        full_name: `${payload?.given_name} ${payload?.family_name}`,
+        avatar: payload?.picture,
+        status: payload?.email_verified ? Status.ACTIVE : Status.PENDING,
         password:await bcrypt.hash("SOCIAL_LOGIN", 10),
       };
 
@@ -188,7 +128,7 @@ export const googleLogin = async (googleAuthDetails: GoogleLoginDetails) => {
         data: user_payload,
       });
 
-      if(user_payload.status==='active'){
+      if(user_payload.status==='ACTIVE'){
         await login({email:user_payload.email, password:user_payload.password})
       }
       return {
@@ -198,7 +138,7 @@ export const googleLogin = async (googleAuthDetails: GoogleLoginDetails) => {
       };
     }
 
-    if (user.status === "pending") {
+    if (user.status === "PENDING") {
       return { status: 401, message: "Please verify your email" };
     }
 
@@ -226,7 +166,7 @@ export const initiateForgotPassword = async (
     return { status: 404, message: "User record not found" };
   }
 
-  if (user.status === "pending") {
+  if (user.status === "PENDING") {
     return { status: 403, message: "Account is pending approval." };
   }
 
@@ -299,7 +239,7 @@ export const resendUserActivationToken = async (email: string) => {
     where: { email },
   });
 
-  if (user?.status !== "pending") {
+  if (user?.status !== "PENDING") {
     return { status: 403, message: "Account is not in pending state." };
   }
 
@@ -335,7 +275,7 @@ export const verifyUserEmail = async (token: string) => {
       },
     });
 
-    if (user?.status !== "pending") {
+    if (user?.status !== "PENDING") {
       return { status: 403, message: "Account is not in pending state." };
     }
 
@@ -345,7 +285,7 @@ export const verifyUserEmail = async (token: string) => {
 
     const updatedUser = await prismaClient.user.update({
       where: { id: userId },
-      data: { status: 'active',token:'' },
+      data: { status: 'ACTIVE',token:'' },
     });
 
     return {

@@ -12,13 +12,6 @@ export {
 // user services
 export { updateUserService,userData, getAllUsersService } from "@/services/userServices";
 
-// payment services
-export {
-  initializePayment,
-  verifyPaymentService,
-  initiateBankTransfer,
-  verifyTransfer,
-} from "@/services/paymentServices";
 
 // auth services
 export {
@@ -32,11 +25,6 @@ export {
   updateCurrentPassword,
 } from "@/services/authServices";
 
-// admin services 
-export { newBootAdmin, newUser, updateUserData,adminLoginService} from "@/services/adminServices";
-
-// property services
-export {newProperty, getAllProperties, singleProperty, updateRetailerProperty, deleteSingleProperty} from '@/services/propertyServices'
 
 // util services
 export { generateUniqueId, generateJwtToken, verifyJWT, generatePassword } from "@/services/utilsServices";

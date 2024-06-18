@@ -3,6 +3,7 @@ import { Status } from '@prisma/client';
 export interface CreateUserInput extends UserInstance {
   email: string;
   password: string;
+  full_name:string;
 }
 
 export interface LoginUserInput {
@@ -37,8 +38,7 @@ export interface UserInstance {
 
 export interface GoogleSignupInstance{
   email:string,
-  first_name?: string,
-  last_name?:string,
+  full_name: string,
   avatar?:string,
   status: Status,
   password: string,

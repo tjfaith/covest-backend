@@ -2,9 +2,9 @@ export const confirmForgotPasswordEmail = (payload: Record<string, string>) => {
   return `
 
   <div style="max-width: 600px; margin: 0 auto; padding: 20px; font-family: 'Roboto', sans-serif; background-color: #f9f9f9; border-radius: 10px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);">
-    <div style="text-align: center; margin-bottom: 20px;">
-        <img src="https://ik.imagekit.io/o59kpgo8iz/COvest/logo.png?updatedAt=1709921490645" alt="COvest Logo" style="width: 50px; height: 50px; margin-right: 10px;">
-        <span style="font-weight: bold; font-size: 24px; color: #333;">COvest</span>
+     <div style="text-align: center; display: flex; flex-direction: row; align-items: center; width: 100%; justify-content: center; margin-bottom: 20px;">
+        <img src="https://ik.imagekit.io/o59kpgo8iz/Backbone/logo/rounded_logo.png?updatedAt=1718687876902" alt="Backbone Logo" style="width: 50px; height: 50px; margin-right: 10px;">
+        <span style="font-weight: bold; font-size: 24px; color: #333;">Backbone</span>
     </div>
     <div style="border: 1px solid #ddd; border-radius: 5px; padding: 20px; background-color: #fff;">
         <div style="margin-bottom: 20px;">
@@ -20,7 +20,7 @@ export const confirmForgotPasswordEmail = (payload: Record<string, string>) => {
         </div>
     </div>
     <div style="text-align: center; margin-top: 20px; color: #777; font-size: 14px;">
-        &copy; COvest Inc <script>document.write(new Date().getFullYear());</script> Modern Payments for Africa
+        &copy; Backbone Inc <script>document.write(new Date().getFullYear());</script> Modern Payments for Africa
     </div>
 </div>
     `;
@@ -28,10 +28,10 @@ export const confirmForgotPasswordEmail = (payload: Record<string, string>) => {
 
 export const verifyEmail = (payload: Record<string, string>) => {
   return `
-    <div style="max-width: 600px; margin: 0 auto; padding: 20px; font-family: 'Roboto', sans-serif; background-color: #f9f9f9; border-radius: 10px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);">
-    <div style="text-align: center; margin-bottom: 20px;">
-        <img src="https://ik.imagekit.io/o59kpgo8iz/COvest/logo.png?updatedAt=1709921490645" alt="COvest Logo" style="width: 50px; height: 50px; margin-right: 10px;">
-        <span style="font-weight: bold; font-size: 24px; color: #333;">COvest</span>
+   <div style="max-width: 600px; margin: 0 auto; padding: 20px; font-family: 'Roboto', sans-serif; background-color: #f9f9f9; border-radius: 10px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);">
+    <div style="text-align: center; display: flex; flex-direction: row; align-items: center; width: 100%; justify-content: center; margin-bottom: 20px;">
+        <img src="https://ik.imagekit.io/o59kpgo8iz/Backbone/logo/rounded_logo.png?updatedAt=1718687876902" alt="Backbone Logo" style="width: 50px; height: 50px; margin-right: 10px;">
+        <span style="font-weight: bold; font-size: 24px; color: #333;">Backbone</span>
     </div>
     <div style="border: 1px solid #ddd; border-radius: 5px; padding: 20px; background-color: #fff;">
         <div style="margin-bottom: 20px;">
@@ -46,7 +46,7 @@ export const verifyEmail = (payload: Record<string, string>) => {
         </div>
     </div>
     <div style="text-align: center; margin-top: 20px; color: #777; font-size: 14px;">
-        &copy; COvest Inc <script>document.write(new Date().getFullYear());</script> Modern Payments for Africa
+        &copy; Backbone <script>document.write(new Date().getFullYear());</script> Trade and exchange currency
     </div>
 </div>
     `;
@@ -56,9 +56,9 @@ export const verifyEmail = (payload: Record<string, string>) => {
 export const adminVerifyEmail = (payload: Record<string, string>) => {
     return `
       <div style="max-width: 600px; margin: 0 auto; padding: 20px; font-family: 'Roboto', sans-serif; background-color: #f9f9f9; border-radius: 10px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);">
-      <div style="text-align: center; margin-bottom: 20px;">
-          <img src="https://ik.imagekit.io/o59kpgo8iz/COvest/logo.png?updatedAt=1709921490645" alt="COvest Logo" style="width: 50px; height: 50px; margin-right: 10px;">
-          <span style="font-weight: bold; font-size: 24px; color: #333;">COvest</span>
+       <div style="text-align: center; display: flex; flex-direction: row; align-items: center; width: 100%; justify-content: center; margin-bottom: 20px;">
+          <img src="https://ik.imagekit.io/o59kpgo8iz/Backbone/logo/rounded_logo.png?updatedAt=1718687876902" alt="Backbone Logo" style="width: 50px; height: 50px; margin-right: 10px;">
+          <span style="font-weight: bold; font-size: 24px; color: #333;">Backbone</span>
       </div>
       <div style="border: 1px solid #ddd; border-radius: 5px; padding: 20px; background-color: #fff;">
           <div style="margin-bottom: 20px;">
@@ -75,7 +75,7 @@ export const adminVerifyEmail = (payload: Record<string, string>) => {
           </div>
       </div>
       <div style="text-align: center; margin-top: 20px; color: #777; font-size: 14px;">
-          &copy; COvest Inc <script>document.write(new Date().getFullYear());</script> Modern Payments for Africa
+          &copy; Backbone Inc <script>document.write(new Date().getFullYear());</script> Modern Payments for Africa
       </div>
   </div>
       `;
@@ -85,9 +85,9 @@ export const adminVerifyEmail = (payload: Record<string, string>) => {
   export const successfulBankTransfer = (payload: Record<string, string | number>) => {
     return `
       <div style="max-width: 600px; margin: 0 auto; padding: 20px; font-family: 'Roboto', sans-serif; background-color: #f9f9f9; border-radius: 10px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);">
-      <div style="text-align: center; margin-bottom: 20px;">
-          <img src="https://ik.imagekit.io/o59kpgo8iz/COvest/logo.png?updatedAt=1709921490645" alt="COvest Logo" style="width: 50px; height: 50px; margin-right: 10px;">
-          <span style="font-weight: bold; font-size: 24px; color: #333;">COvest</span>
+       <div style="text-align: center; display: flex; flex-direction: row; align-items: center; width: 100%; justify-content: center; margin-bottom: 20px;">
+          <img src="https://ik.imagekit.io/o59kpgo8iz/Backbone/logo/rounded_logo.png?updatedAt=1718687876902" alt="Backbone Logo" style="width: 50px; height: 50px; margin-right: 10px;">
+          <span style="font-weight: bold; font-size: 24px; color: #333;">Backbone</span>
       </div>
       <div style="border: 1px solid #ddd; border-radius: 5px; padding: 20px; background-color: #fff;">
           <div style="margin-bottom: 20px;">
@@ -107,7 +107,7 @@ export const adminVerifyEmail = (payload: Record<string, string>) => {
           </div>
       </div>
       <div style="text-align: center; margin-top: 20px; color: #777; font-size: 14px;">
-          &copy; COvest Inc <script>document.write(new Date().getFullYear());</script> Modern Payments for Africa
+          &copy; Backbone Inc <script>document.write(new Date().getFullYear());</script> Modern Payments for Africa
       </div>
   </div>
       `;

@@ -8,6 +8,7 @@ model User {
   gender        String?
   date_of_birth DateTime?
   address       String?
+  avatar        String?       @default("https://ik.imagekit.io/o59kpgo8iz/Backbone/user%20images/default_user.jpg?updatedAt=1718689050953")
   city          String?
   role          UserRole      @default(USER)
   state         String?
